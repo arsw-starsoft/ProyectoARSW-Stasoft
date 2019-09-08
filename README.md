@@ -6,7 +6,7 @@
 * [Juan Ospina](https://github.com/QSARJP)
 
 ## Enlace a la Wiki
-[PsicoServicios Wiki](https://github.com/QSARJP/ProyectoARSW-StarSoft/wiki)
+[Synchdrive Wiki](https://github.com/QSARJP/ProyectoARSW-StarSoft/wiki)
 
 ## Enlace a las historias de usuario
 [Taiga](https://tree.taiga.io/project/qsarjp-proyectoarsw-starsoft/backlog)
