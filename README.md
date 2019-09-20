@@ -2,7 +2,7 @@
 
 ## Integrantes
 * [Julian Benitez](https://github.com/julianbenitez99)
-* [Luis Pizza](https://github.com/luis572)
+* [Luis Piza](https://github.com/luis572)
 * [Juan Ospina](https://github.com/QSARJP)
 
 ## Enlace a la Wiki

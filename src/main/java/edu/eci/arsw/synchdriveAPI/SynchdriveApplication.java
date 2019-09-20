@@ -1,4 +1,4 @@
-package edu.eci.arsw.synchdrive;
+package edu.eci.arsw.synchdriveAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
