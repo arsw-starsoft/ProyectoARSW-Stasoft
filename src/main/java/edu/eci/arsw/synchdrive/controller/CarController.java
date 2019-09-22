@@ -1,7 +1,7 @@
 package edu.eci.arsw.synchdrive.controller;
 
-import edu.eci.arsw.synchdrive.model.User;
-import edu.eci.arsw.synchdrive.services.UserServices;
+import edu.eci.arsw.synchdrive.model.Car;
+import edu.eci.arsw.synchdrive.services.CarServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,20 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class CarController {
 
     @Autowired
-    private UserServices userServices;
+    private CarServices carServices;
 
     //Método de prueba para verificar autowired y repo
-    @GetMapping(value = "/usertest")
+    @GetMapping(value = "/cartest")
     public ResponseEntity<?> testMethod(){
-        User user = new User();
-        user.setName("test name");
-        user.setEmail("test1@mail.com");
-        user.setPassword("123");
-        userServices.saveUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        Car car = new Car();
+        car.setPlate("123SRE");
+        car.setModel("Z");
+        car.setSeats(5);
+        carServices.saveCar(car);
+        return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
-
 }

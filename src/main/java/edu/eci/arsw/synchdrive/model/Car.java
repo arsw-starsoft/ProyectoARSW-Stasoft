@@ -1,28 +1,51 @@
 package edu.eci.arsw.synchdrive.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Car {
 
-    private Integer id;
+    @Id
+    private String plate;
 
-    private String placa;
+    @Column
+    private String model;
 
-    public Car() {
-        
+    @Column
+    private Integer seats;
+
+    @ManyToOne
+    private Driver driver;
+
+    public String getPlate() {
+        return plate;
     }
 
-    public String getPlaca() {
-        return placa;
+    public void setPlate(String plate) {
+        this.plate = plate;
     }
 
-    public void setPlaca(String placa) {
-        this.placa = placa;
+    public String getModel() {
+        return model;
     }
 
-    public Integer getId() {
-        return id;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Integer getSeats() {
+        return seats;
+    }
+
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }
