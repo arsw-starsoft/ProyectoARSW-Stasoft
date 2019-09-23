@@ -7,6 +7,10 @@ import java.io.Serializable;
 public class Car implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
     private String plate;
 
     @Column
