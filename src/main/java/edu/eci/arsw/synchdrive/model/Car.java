@@ -1,9 +1,10 @@
 package edu.eci.arsw.synchdrive.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Car {
+public class Car implements Serializable {
 
     @Id
     private String plate;
@@ -16,6 +17,9 @@ public class Car {
 
     @ManyToOne
     private Driver driver;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Coordinate coordinate;
 
     public String getPlate() {
         return plate;
@@ -47,5 +51,13 @@ public class Car {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 }

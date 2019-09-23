@@ -1,13 +1,14 @@
 package edu.eci.arsw.synchdrive.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
 @Inheritance(
         strategy = InheritanceType.JOINED
 )
-public class Person {
+public class Person implements Serializable {
 
     @Id
     private String email;

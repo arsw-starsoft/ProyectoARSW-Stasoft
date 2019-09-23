@@ -2,10 +2,11 @@ package edu.eci.arsw.synchdrive.model;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Driver extends Person {
+public class Driver extends Person implements Serializable {
 
     @OneToMany(mappedBy = "driver")
     private List<Car> cars;
