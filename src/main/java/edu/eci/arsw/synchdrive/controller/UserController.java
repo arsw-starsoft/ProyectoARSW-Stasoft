@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
@@ -48,7 +50,7 @@ public class UserController {
 
     
     @GetMapping(path = "/{user}")
-    public ResponseEntity<?> getDriverByName(@PathVariable("user") String name){
+    public ResponseEntity<?> getUserByName(@PathVariable("user") String name){
         User user = null;
         try{
             user = userServices.findUserByName(name);
@@ -60,7 +62,7 @@ public class UserController {
 
     
     @PostMapping
-    public ResponseEntity<?> addNewDriver(@RequestBody User user){
+    public ResponseEntity<?> addNewUser(@RequestBody User user){
         try{
             userServices.saveUser(user);
             return new ResponseEntity<>(user,HttpStatus.CREATED);
