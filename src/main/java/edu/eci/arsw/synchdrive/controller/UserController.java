@@ -50,10 +50,10 @@ public class UserController {
 
     
     @GetMapping(path = "/{user}")
-    public ResponseEntity<?> getUserByName(@PathVariable("user") String name){
+    public ResponseEntity<?> getUserByEmail(@PathVariable("user") String email){
         User user = null;
         try{
-            user = userServices.findUserByName(name);
+            user = userServices.findUserByEmail(email);
             return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>("Error 404",HttpStatus.NOT_FOUND);

@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,String> {
+public interface UserRepository extends JpaRepository<User,Integer> {
 
     List<User> findAll();
 
     User save(User user);
 
-    Optional<User> findByName(String user);
+    Optional<User> findByEmail(String email);
 
 }

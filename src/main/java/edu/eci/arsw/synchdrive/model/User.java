@@ -1,16 +1,21 @@
 package edu.eci.arsw.synchdrive.model;
 
-import javax.persistence.Entity;
 
-import org.springframework.data.annotation.Id;
+
+
 import javax.persistence.*;
 
 import java.io.Serializable;
 
 @Entity
-public class User  implements Serializable {
-    
-    @Id
+public class User implements Serializable {
+
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
     private String email;
 
     @Column

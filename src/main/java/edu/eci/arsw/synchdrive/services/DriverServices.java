@@ -11,5 +11,5 @@ public interface DriverServices {
 
     void saveDriver(Driver driver) throws SynchdrivePersistenceException;
 
-    Driver findDriverByName(String user) throws SynchdrivePersistenceException;
+    Driver findDriverByEmail(String email) throws SynchdrivePersistenceException;
 }

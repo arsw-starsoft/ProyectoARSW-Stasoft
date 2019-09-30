@@ -11,5 +11,5 @@ public interface UserServices {
 
     void saveUser(User user) throws SynchdrivePersistenceException;
 
-    User findUserByName(String user) throws SynchdrivePersistenceException;
+    User findUserByEmail(String email) throws SynchdrivePersistenceException;
 }

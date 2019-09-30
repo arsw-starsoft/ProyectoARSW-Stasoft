@@ -30,8 +30,8 @@ public class DriverServicesImpl implements DriverServices {
     }
 
     @Override
-    public Driver findDriverByName(String user) throws SynchdrivePersistenceException {
-        Optional<Driver> optinalDriver = driverRepository.findByName(user);
+    public Driver findDriverByEmail(String user) throws SynchdrivePersistenceException {
+        Optional<Driver> optinalDriver = driverRepository.findByEmail(user);
         if (!optinalDriver.isPresent())
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CAR_NOT_FOUND);
         return optinalDriver.get();

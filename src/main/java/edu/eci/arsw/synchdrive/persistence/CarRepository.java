@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CarRepository extends JpaRepository<Car,String> {
+public interface CarRepository extends JpaRepository<Car,Integer> {
 
     List<Car> findAll();
 

@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DriverRepository extends JpaRepository<Driver,String> {
+public interface DriverRepository extends JpaRepository<Driver,Integer> {
 
     List<Driver> findAll();
 
     Driver save(Driver driver);
 
-    Optional<Driver> findByName(String user);
+    Optional<Driver> findByEmail(String email);
 }

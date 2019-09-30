@@ -1,18 +1,19 @@
 package edu.eci.arsw.synchdrive.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class Coordinate implements Serializable {
 
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column
     private Double latitude;
 
-    @Id
     @Column
     private Double longitude;
 

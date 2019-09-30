@@ -27,8 +27,8 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public User findUserByName(String user) throws SynchdrivePersistenceException {
-        Optional<User> optinalUser = userRepository.findByName(user);
+    public User findUserByEmail(String user) throws SynchdrivePersistenceException {
+        Optional<User> optinalUser = userRepository.findByEmail(user);
         if (!optinalUser.isPresent())
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CAR_NOT_FOUND);
         return optinalUser.get();
