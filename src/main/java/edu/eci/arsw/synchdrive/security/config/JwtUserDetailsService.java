@@ -1,5 +1,8 @@
 package edu.eci.arsw.synchdrive.security.config;
 
+import edu.eci.arsw.synchdrive.model.Customer;
+import edu.eci.arsw.synchdrive.model.Driver;
+import edu.eci.arsw.synchdrive.persistence.DriverRepository;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,24 +15,40 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Component
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder bcryptEncoder;
+    private DriverRepository driverRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if ("javainuse".equals(username)) {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Driver> optionalDriver = driverRepository.findByEmail(email);
+        if (optionalDriver.isPresent()){
+            Driver driver = optionalDriver.get();
+            return new User(driver.getEmail(),driver.getPassword(), new ArrayList<>());
+        }
+
+        Optional<Customer> optionalCustomer = userRepository.findByEmail(email);
+        if (optionalCustomer.isPresent()){
+            Customer customer = optionalCustomer.get();
+            return new User(customer.getEmail(),customer.getPassword(), new ArrayList<>());
+        }
+
+        throw new UsernameNotFoundException("User not found with username: " + email);
+        /*
+        if ("javainuse".equals(email)) {
             return new User("javainuse", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
                     new ArrayList<>());
         } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with username: " + email);
         }
+        */
     }
 
 

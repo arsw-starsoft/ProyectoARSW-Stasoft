@@ -5,6 +5,7 @@ import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import edu.eci.arsw.synchdrive.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder bcryptPasswordEncoder;
+
     @Override
     public List<Customer> getAllUsers() throws SynchdrivePersistenceException {
         return userRepository.findAll();
@@ -23,11 +27,14 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void saveUser(Customer customer) throws SynchdrivePersistenceException {
-        Optional<Customer> optinalUser = userRepository.findByEmail(customer.getEmail());
-        if (optinalUser.isPresent()){
+        Optional<Customer> optionalCustomer = userRepository.findByEmail(customer.getEmail());
+        if (optionalCustomer.isPresent()){
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
         }
         else{
+            String rawPassword = customer.getPassword();
+            String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
+            customer.setPassword(encodedPassword);
             userRepository.save(customer);
         }
         
