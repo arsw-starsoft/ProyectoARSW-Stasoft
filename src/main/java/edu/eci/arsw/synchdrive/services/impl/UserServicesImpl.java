@@ -23,14 +23,23 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void saveUser(Customer customer) throws SynchdrivePersistenceException {
-        userRepository.save(customer);
+        Optional<Customer> optinalUser = userRepository.findByEmail(customer.getEmail());
+        if (optinalUser.isPresent()){
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
+        }
+        else{
+            userRepository.save(customer);
+        }
+        
     }
 
     @Override
     public Customer findUserByEmail(String user) throws SynchdrivePersistenceException {
         Optional<Customer> optinalUser = userRepository.findByEmail(user);
-        if (!optinalUser.isPresent())
-            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CAR_NOT_FOUND);
+        boolean present = optinalUser.isPresent();
+        System.out.println(present);
+        if (!present)
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
         return optinalUser.get();
     }
 }

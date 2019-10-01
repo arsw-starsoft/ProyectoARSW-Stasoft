@@ -23,7 +23,14 @@ public class CarServicesImpl implements CarServices {
 
     @Override
     public void saveCar(Car car) throws SynchdrivePersistenceException{
-        carRepository.save(car);
+        Optional<Car> optinalUser = carRepository.findByPlate(car.getPlate());
+        if (optinalUser.isPresent()){
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
+        }
+        else{
+            carRepository.save(car);
+        }
+        
     }
 
 
