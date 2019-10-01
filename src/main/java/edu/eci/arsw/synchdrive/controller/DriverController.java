@@ -40,7 +40,7 @@ public class DriverController {
             List<Driver> driver = driverServices.getAllDrivers();
             return new ResponseEntity<>(driver,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
-            return new ResponseEntity<>("Error 500",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,7 +52,7 @@ public class DriverController {
             driver = driverServices.findDriverByEmail(email);
             return new ResponseEntity<>(driver,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
-            return new ResponseEntity<>("Error 404",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -63,7 +63,7 @@ public class DriverController {
             driverServices.saveDriver(driver);
             return new ResponseEntity<>(driver,HttpStatus.CREATED);
         }catch (SynchdrivePersistenceException ex){
-            return new ResponseEntity<>("ERROR 400",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
