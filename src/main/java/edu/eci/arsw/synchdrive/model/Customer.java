@@ -1,14 +1,17 @@
 package edu.eci.arsw.synchdrive.model;
 
 
-import java.io.Serializable;
-import java.util.List;
+
+
 import javax.persistence.*;
 
-@Entity
-public class Driver implements Serializable {
+import java.io.Serializable;
 
-    @Id
+@Entity
+public class Customer implements Serializable {
+
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -27,11 +30,9 @@ public class Driver implements Serializable {
     @Column
     private String cellPhone;
 
+
     @Column
     private String password;
-
-    @OneToMany(mappedBy = "driver")
-    private List<Car> cars;
 
 
     public String getEmail() {
@@ -81,14 +82,5 @@ public class Driver implements Serializable {
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
     }
-
-    
-
-    public List<Car> getCars() {
-        return cars;
-    }
-
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
-    }
 }
+

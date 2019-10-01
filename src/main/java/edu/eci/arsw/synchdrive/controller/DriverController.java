@@ -50,10 +50,10 @@ public class DriverController {
 
     
     @GetMapping(path = "/{driver}")
-    public ResponseEntity<?> getDriverByName(@PathVariable("driver") String name){
+    public ResponseEntity<?> getDriverByEmail(@PathVariable("driver") String email){
         Driver driver = null;
         try{
-            driver = driverServices.findDriverByName(name);
+            driver = driverServices.findDriverByEmail(email);
             return new ResponseEntity<>(driver,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>("Error 404",HttpStatus.NOT_FOUND);
