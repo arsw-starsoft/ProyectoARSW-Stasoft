@@ -1,6 +1,6 @@
 package edu.eci.arsw.synchdrive.controller;
 
-import edu.eci.arsw.synchdrive.model.User;
+import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.UserServices;
 
@@ -26,12 +26,12 @@ public class UserController {
     //Método de prueba para verificar autowired y repo
     @GetMapping(value = "/usertest")
     public ResponseEntity<?> testMethod() throws SynchdrivePersistenceException {
-        User user = new User();
-        user.setName("test name");
-        user.setEmail("test1@mail.com");
-        user.setPassword("123");
-        userServices.saveUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        Customer customer = new Customer();
+        customer.setName("test name");
+        customer.setEmail("test1@mail.com");
+        customer.setPassword("123");
+        userServices.saveUser(customer);
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     /**
@@ -41,8 +41,8 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getAllUser(){
         try{
-            List<User> users = userServices.getAllUsers();
-            return new ResponseEntity<>(users,HttpStatus.ACCEPTED);
+            List<Customer> customers = userServices.getAllUsers();
+            return new ResponseEntity<>(customers,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>("Error 500",HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -51,10 +51,10 @@ public class UserController {
     
     @GetMapping(path = "/{user}")
     public ResponseEntity<?> getUserByEmail(@PathVariable("user") String email){
-        User user = null;
+        Customer customer = null;
         try{
-            user = userServices.findUserByEmail(email);
-            return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
+            customer = userServices.findUserByEmail(email);
+            return new ResponseEntity<>(customer,HttpStatus.ACCEPTED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>("Error 404",HttpStatus.NOT_FOUND);
         }
@@ -62,10 +62,10 @@ public class UserController {
 
     
     @PostMapping
-    public ResponseEntity<?> addNewUser(@RequestBody User user){
+    public ResponseEntity<?> addNewUser(@RequestBody Customer customer){
         try{
-            userServices.saveUser(user);
-            return new ResponseEntity<>(user,HttpStatus.CREATED);
+            userServices.saveUser(customer);
+            return new ResponseEntity<>(customer,HttpStatus.CREATED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>("ERROR 400",HttpStatus.BAD_REQUEST);
         }

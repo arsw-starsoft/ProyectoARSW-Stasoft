@@ -1,6 +1,6 @@
 package edu.eci.arsw.synchdrive.persistence;
 
-import edu.eci.arsw.synchdrive.model.User;
+import edu.eci.arsw.synchdrive.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends JpaRepository<Customer,Integer> {
 
-    List<User> findAll();
+    List<Customer> findAll();
 
-    User save(User user);
+    Customer save(Customer customer);
 
-    Optional<User> findByEmail(String email);
+    Optional<Customer> findByEmail(String email);
 
 }

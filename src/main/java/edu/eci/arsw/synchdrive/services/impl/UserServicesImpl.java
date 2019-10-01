@@ -1,6 +1,6 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
-import edu.eci.arsw.synchdrive.model.User;
+import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import edu.eci.arsw.synchdrive.services.UserServices;
@@ -17,18 +17,18 @@ public class UserServicesImpl implements UserServices {
     private UserRepository userRepository;
 
     @Override
-    public List<User> getAllUsers() throws SynchdrivePersistenceException {
+    public List<Customer> getAllUsers() throws SynchdrivePersistenceException {
         return userRepository.findAll();
     }
 
     @Override
-    public void saveUser(User user) throws SynchdrivePersistenceException {
-        userRepository.save(user);
+    public void saveUser(Customer customer) throws SynchdrivePersistenceException {
+        userRepository.save(customer);
     }
 
     @Override
-    public User findUserByEmail(String user) throws SynchdrivePersistenceException {
-        Optional<User> optinalUser = userRepository.findByEmail(user);
+    public Customer findUserByEmail(String user) throws SynchdrivePersistenceException {
+        Optional<Customer> optinalUser = userRepository.findByEmail(user);
         if (!optinalUser.isPresent())
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CAR_NOT_FOUND);
         return optinalUser.get();
