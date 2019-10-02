@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -94,7 +95,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate").permitAll().and()
                 .authorizeRequests().
-                antMatchers("/h2-console/**").permitAll().
+                antMatchers("/h2-console/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.POST,"/users").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.POST,"/drivers").permitAll().
 
 // all other requests need to be authenticated
         anyRequest().authenticated().
