@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
+import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Driver;
 import edu.eci.arsw.synchdrive.persistence.DriverRepository;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
@@ -21,26 +22,24 @@ public class DriverServicesImpl implements DriverServices {
     private PasswordEncoder bcryptPasswordEncoder;
 
     @Override
-    public List<Driver> getAllDrivers() throws SynchdrivePersistenceException{
-       
-         return driverRepository.findAll();
-        
-        
+    public List<Driver> getAllDrivers() throws SynchdrivePersistenceException {
+
+        return driverRepository.findAll();
+
     }
 
     @Override
     public void saveDriver(Driver driver) throws SynchdrivePersistenceException {
         Optional<Driver> optionalDriver = driverRepository.findByEmail(driver.getEmail());
-        if (optionalDriver.isPresent()){
+        if (optionalDriver.isPresent()) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
-        }
-        else{
+        } else {
             String rawPassword = driver.getPassword();
             String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
             driver.setPassword(encodedPassword);
             driverRepository.save(driver);
         }
-        
+
     }
 
     @Override
@@ -49,5 +48,17 @@ public class DriverServicesImpl implements DriverServices {
         if (!optinalDriver.isPresent())
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.DRIVER_NOT_FOUND);
         return optinalDriver.get();
+    }
+
+    @Override
+    public void saveApp(String dirver, App app) throws SynchdrivePersistenceException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void updateApps(String dirver, App app) throws SynchdrivePersistenceException {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -1,11 +1,9 @@
 package edu.eci.arsw.synchdrive.model;
 
-
-
-
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Customer implements Serializable {
@@ -33,6 +31,10 @@ public class Customer implements Serializable {
 
     @Column
     private String password;
+
+    @OneToMany(mappedBy = "customer")
+    private List<App> apps;
+
 
 
     public String getEmail() {
@@ -81,6 +83,14 @@ public class Customer implements Serializable {
 
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
+    }
+
+    public List<App> getApps() {
+        return apps;
+    }
+
+    public void setApps(List<App> apps) {
+        this.apps = apps;
     }
 }
 

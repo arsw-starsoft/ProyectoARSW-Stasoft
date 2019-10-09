@@ -1,10 +1,13 @@
 package edu.eci.arsw.synchdrive.controller;
 
+import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.UserServices;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,6 +68,30 @@ public class UserController {
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(path = "/{user}",method = RequestMethod.POST)
+    public ResponseEntity<?> addNewApp(@PathVariable("user") String user,@RequestBody App app){
+        try{
+            userServices.saveApp(user,app);
+            return new ResponseEntity<>(app,HttpStatus.CREATED);
+        }catch (SynchdrivePersistenceException ex){
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+    @RequestMapping(path = "/{user}",method = RequestMethod.PUT)	
+    public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody App app){
+        try {
+            
+            userServices.updateApps(user,app);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
+        }        
+
     }
 
 }

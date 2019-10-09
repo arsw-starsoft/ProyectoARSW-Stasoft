@@ -1,10 +1,13 @@
 package edu.eci.arsw.synchdrive.controller;
 
+import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Driver;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.DriverServices;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,5 +69,32 @@ public class DriverController {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    @RequestMapping(path = "/{driver}",method = RequestMethod.POST)
+    public ResponseEntity<?> addNewApp(@PathVariable("driver") String driver,@RequestBody App app){
+        try{
+            driverServices.saveApp(driver,app);
+            return new ResponseEntity<>(app,HttpStatus.CREATED);
+        }catch (SynchdrivePersistenceException ex){
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+    @RequestMapping(path = "/{driver}",method = RequestMethod.PUT)	
+    public ResponseEntity<?> addApp(@PathVariable("driver") String driver,@Valid @RequestBody App app){
+        try {
+            
+            driverServices.updateApps(driver,app);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
+        }        
+
+    }
+
+    
 
 }

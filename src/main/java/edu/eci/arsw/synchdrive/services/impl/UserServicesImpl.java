@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
+import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
@@ -28,16 +29,15 @@ public class UserServicesImpl implements UserServices {
     @Override
     public void saveUser(Customer customer) throws SynchdrivePersistenceException {
         Optional<Customer> optionalCustomer = userRepository.findByEmail(customer.getEmail());
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
-        }
-        else{
+        } else {
             String rawPassword = customer.getPassword();
             String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
             customer.setPassword(encodedPassword);
             userRepository.save(customer);
         }
-        
+
     }
 
     @Override
@@ -48,5 +48,32 @@ public class UserServicesImpl implements UserServices {
         if (!present)
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
         return optinalUser.get();
+    }
+
+    @Override
+    public void saveApp(String customer, App app) throws SynchdrivePersistenceException {
+        Optional<Customer> optinalUser = userRepository.findByEmail(customer);
+        boolean present = optinalUser.isPresent();
+        System.out.println(present);
+        if (!present){
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
+        }else{
+
+        }
+        
+
+    }
+
+    @Override
+    public void updateApps(String customer, App app) throws SynchdrivePersistenceException {
+        Optional<Customer> optinalUser = userRepository.findByEmail(customer);
+        boolean present = optinalUser.isPresent();
+        System.out.println(present);
+        if (!present){
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
+        }else{
+            
+        }
+        
     }
 }

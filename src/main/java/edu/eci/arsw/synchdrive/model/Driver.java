@@ -33,6 +33,9 @@ public class Driver implements Serializable {
     @OneToMany(mappedBy = "driver")
     private List<Car> cars;
 
+    @OneToMany(mappedBy = "driver")
+    private List<App> apps;
+
 
     public String getEmail() {
         return email;
@@ -90,5 +93,13 @@ public class Driver implements Serializable {
 
     public void setCars(List<Car> cars) {
         this.cars = cars;
+    }
+
+    public List<App> getApps() {
+        return apps;
+    }
+
+    public void setApps(List<App> apps) {
+        this.apps = apps;
     }
 }
