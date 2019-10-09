@@ -36,7 +36,8 @@ public class SynchdriveApplicationTests {
 	public void createTestUser(){
 		Customer customer = new Customer();
 		customer.setEmail("test_user");customer.setPassword("123");
-		userRepository.save(customer);
+		if (userRepository.findByEmail("test_user") == null)
+			userRepository.save(customer);
 		authToken = "Bearer " + jwtTokenUtil.createTestToken("test_user");
 	}
 
