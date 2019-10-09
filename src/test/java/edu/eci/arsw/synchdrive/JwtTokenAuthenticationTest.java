@@ -3,6 +3,9 @@ package edu.eci.arsw.synchdrive;
 import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import edu.eci.arsw.synchdrive.security.config.JwtTokenUtil;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +29,6 @@ public class JwtTokenAuthenticationTest {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserRepository userRepository;
-
 
     @Test
     public void shouldNotAllowAccessToCarsToUnauthenticatedUsers() throws Exception {
@@ -47,13 +47,9 @@ public class JwtTokenAuthenticationTest {
 
     @Test
     public void shouldGenerateAuthToken() throws Exception {
-        Customer testCustomer = new Customer(); testCustomer.setEmail("test_user");testCustomer.setPassword("123");
-        userRepository.save(testCustomer);
         String token = jwtTokenUtil.createTestToken("test_user");
         assertNotNull(token);
         mvc.perform(MockMvcRequestBuilders.get("/cars").header("Authorization","Bearer "+ token)).andExpect(status().isAccepted());
-        userRepository.delete(testCustomer);
     }
-
 
 }

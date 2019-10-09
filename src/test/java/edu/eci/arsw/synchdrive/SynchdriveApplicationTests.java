@@ -25,35 +25,23 @@ public class SynchdriveApplicationTests {
 	private MockMvc mvc;
 
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	private String authToken;
 
 	@Before
-	public void createTestUser(){
-		Customer customer = new Customer();
-		customer.setEmail("test_user");customer.setPassword("123");
-		if (userRepository.findByEmail("test_user") == null)
-			userRepository.save(customer);
-		authToken = "Bearer " + jwtTokenUtil.createTestToken("test_user");
+	public void createAuthToken(){
+		if (authToken == null)
+			authToken = "Bearer " + jwtTokenUtil.createTestToken("test_user");
 	}
 
 	@Test
 	public void getAllCarsAPI() throws Exception {
-		System.out.println(authToken);
 		mvc.perform(MockMvcRequestBuilders
 		.get("/cars").header("Authorization",authToken))
 				.andDo(print())
 				.andExpect(status().isAccepted());
 	}
 
-	@After
-	public void deleteTestUser(){
-		Customer delCustomer = new Customer(); delCustomer.setName("test_user");
-		userRepository.delete(delCustomer);
-	}
 
 }
