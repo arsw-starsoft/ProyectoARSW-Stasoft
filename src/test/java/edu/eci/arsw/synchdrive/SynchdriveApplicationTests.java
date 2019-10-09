@@ -1,7 +1,5 @@
 package edu.eci.arsw.synchdrive;
 
-import edu.eci.arsw.synchdrive.model.Customer;
-import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import edu.eci.arsw.synchdrive.security.config.JwtTokenUtil;
 import org.junit.*;
 import org.junit.runner.RunWith;
