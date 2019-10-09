@@ -35,20 +35,12 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
 
         Optional<Customer> optionalCustomer = userRepository.findByEmail(email);
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
-            return new User(customer.getEmail(),customer.getPassword(), new ArrayList<>());
+            return new User(customer.getEmail(), customer.getPassword(), new ArrayList<>());
         }
 
         throw new UsernameNotFoundException("User not found with username: " + email);
-        /*
-        if ("javainuse".equals(email)) {
-            return new User("javainuse", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-                    new ArrayList<>());
-        } else {
-            throw new UsernameNotFoundException("User not found with username: " + email);
-        }
-        */
     }
 
 

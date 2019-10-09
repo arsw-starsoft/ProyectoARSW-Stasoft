@@ -23,12 +23,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
-
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 *60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 864_000_000; // 10 days;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -113,6 +112,17 @@ public class JwtTokenUtil implements Serializable {
 
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 
+    }
+
+    //Test token for tests
+    public String createTestToken(String username) {
+        String jwt = Jwts.builder()
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+
+        return jwt;
     }
 
 }
