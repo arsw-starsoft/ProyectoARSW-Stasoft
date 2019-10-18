@@ -70,7 +70,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/{user}",method = RequestMethod.POST)
+    @PostMapping(path = "/{user}")
     public ResponseEntity<?> addNewApp(@PathVariable("user") String user,@RequestBody App app){
         try{
             userServices.saveApp(user,app);
@@ -82,7 +82,7 @@ public class UserController {
 
 
 
-    @RequestMapping(path = "/{user}",method = RequestMethod.PUT)	
+    @PutMapping(path = "/{user}")
     public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody App app){
         try {
             
