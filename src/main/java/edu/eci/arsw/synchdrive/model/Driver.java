@@ -48,7 +48,10 @@ public class Driver implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (!email.isEmpty()){
+            this.email = email;
+        }
+        
     }
 
     public String getFirstName() {
@@ -56,7 +59,9 @@ public class Driver implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (!firstName.isEmpty()){
+            this.firstName = firstName;
+        }
     }
 
     public String getLastName() {
@@ -64,7 +69,9 @@ public class Driver implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (!lastName.isEmpty()){
+            this.lastName = lastName;
+        }
     }
 
     public String getUserName() {
@@ -72,7 +79,9 @@ public class Driver implements Serializable {
     }
 
     public void setName(String userName) {
-        this.userName = userName;
+        if (!userName.isEmpty()){
+            this.userName = userName;
+        }
     }
 
     public String getPassword() {
@@ -80,7 +89,10 @@ public class Driver implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (!password.isEmpty()){
+            this.password = password;
+        }
+        
     }
 
     public String getCellPhone() {
@@ -88,9 +100,10 @@ public class Driver implements Serializable {
     }
 
     public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
+        if (!cellPhone.isEmpty()){
+            this.cellPhone = cellPhone;
+        }
     }
-
     
 
     public List<Car> getCars() {
@@ -98,7 +111,9 @@ public class Driver implements Serializable {
     }
 
     public void setCars(List<Car> cars) {
-        this.cars = cars;
+        if (!cars.isEmpty()){
+            this.cars = cars;
+        }
     }
 
     public List<App> getApps() {
@@ -106,6 +121,8 @@ public class Driver implements Serializable {
     }
 
     public void setApps(List<App> apps) {
-        this.apps = apps;
+        if (!apps.isEmpty()){
+            this.apps = apps;
+        }
     }
 }
