@@ -48,7 +48,7 @@ public class Driver implements Serializable {
     }
 
     public void setEmail(String email) {
-        if (!email.isEmpty()){
+        if (email != null){
             this.email = email;
         }
         
@@ -59,7 +59,7 @@ public class Driver implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        if (!firstName.isEmpty()){
+        if (firstName != null){
             this.firstName = firstName;
         }
     }
@@ -69,7 +69,7 @@ public class Driver implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        if (!lastName.isEmpty()){
+        if (lastName != null){
             this.lastName = lastName;
         }
     }
@@ -79,7 +79,7 @@ public class Driver implements Serializable {
     }
 
     public void setName(String userName) {
-        if (!userName.isEmpty()){
+        if (userName != null){
             this.userName = userName;
         }
     }
@@ -89,7 +89,7 @@ public class Driver implements Serializable {
     }
 
     public void setPassword(String password) {
-        if (!password.isEmpty()){
+        if (password != null){
             this.password = password;
         }
         
@@ -100,7 +100,7 @@ public class Driver implements Serializable {
     }
 
     public void setCellPhone(String cellPhone) {
-        if (!cellPhone.isEmpty()){
+        if (cellPhone != null){
             this.cellPhone = cellPhone;
         }
     }
@@ -111,7 +111,7 @@ public class Driver implements Serializable {
     }
 
     public void setCars(List<Car> cars) {
-        if (!cars.isEmpty()){
+        if (cars != null){
             this.cars = cars;
         }
     }
@@ -121,7 +121,7 @@ public class Driver implements Serializable {
     }
 
     public void setApps(List<App> apps) {
-        if (!apps.isEmpty()){
+        if (apps != null){
             this.apps = apps;
         }
     }
