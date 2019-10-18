@@ -23,7 +23,6 @@ public class AppController {
     public ResponseEntity<?> testMethod() throws SynchdrivePersistenceException {
         App app = new App();
         app.setName("testApp");
-        app.setEmail("adad@sdad.com");
         appServices.saveApp(app);
         return new ResponseEntity<>(app, HttpStatus.CREATED);
     }

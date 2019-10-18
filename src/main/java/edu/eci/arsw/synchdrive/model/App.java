@@ -1,7 +1,15 @@
 package edu.eci.arsw.synchdrive.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class App implements Serializable {
@@ -13,15 +21,13 @@ public class App implements Serializable {
     @Column
     private String name;
 
-    @Column
-    private String email;
-
+    @JsonIgnore
     @ManyToOne
     private Driver driver;
-
+    @JsonIgnore
     @ManyToOne
     private Customer customer;
-
+    
     public String getName() {
         return name;
     }
@@ -29,14 +35,8 @@ public class App implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    
     public Driver getDriver() {
         return driver;
     }
@@ -52,5 +52,6 @@ public class App implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+    
 
 }
