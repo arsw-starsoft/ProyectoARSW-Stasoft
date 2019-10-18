@@ -111,13 +111,12 @@ public class DriverServicesImpl implements DriverServices {
     public void updateDriver(String user, Driver driver) throws SynchdrivePersistenceException {
         Optional<Driver> optinalDriver = driverRepository.findByEmail(user);
         boolean present = optinalDriver.isPresent();
-        System.out.println(present);
         if (!present){
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.DRIVER_NOT_FOUND);
         }else{
             Driver dri = optinalDriver.get();
-            dri.setApps(driver.getApps());
-            dri.setCars(driver.getCars());
+            setApps(dri,driver.getApps());
+            setCars(dri,driver.getCars());
             dri.setCellPhone(driver.getCellPhone());
             dri.setFirstName(driver.getFirstName());
             dri.setLastName(driver.getLastName());
@@ -126,6 +125,61 @@ public class DriverServicesImpl implements DriverServices {
             driverRepository.save(dri);
         }
         
+    }
+    private void setApps(Driver driver, List<App> apps) throws SynchdrivePersistenceException{
+        Boolean flag = false;
+        if (driver.getApps().isEmpty()){
+            for (App i: apps){
+                i.setDriver(driver);
+                appRepository.save(i);
+            }
+            driver.setApps(apps);
+        }else{
+            List<App> currentApps = driver.getApps();
+            for (App i: apps){
+                for (App j: currentApps){
+                    if (j.getName().equals(i.getName())){
+                        flag = true;
+                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_ALREDY_EXISTS);
+                    }
+                }
+                if(!flag){
+                    i.setDriver(driver);
+                    appRepository.save(i);
+                    currentApps.add(i);
+                }
+            }
+            driver.setApps(currentApps);
+        }
+
+    }
+
+    private void setCars(Driver driver, List<Car> cars) throws SynchdrivePersistenceException{
+        Boolean flag = false;
+        if (driver.getCars().isEmpty()){
+            for (Car i: cars){
+                i.setDriver(driver);
+                carRepository.save(i);
+            }
+            driver.setCars(cars);
+        }else{
+            List<Car> currentCars = driver.getCars();
+            for (Car i: cars){
+                for (Car j: currentCars){
+                    if (j.getPlate().equals(i.getPlate())){
+                        flag = true;
+                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CAR_ALREDY_EXISTS);
+                    }
+                }
+                if(!flag){
+                    i.setDriver(driver);
+                    carRepository.save(i);
+                    currentCars.add(i);
+                }
+            }
+            driver.setCars(currentCars);
+        }
+
     }
 
     

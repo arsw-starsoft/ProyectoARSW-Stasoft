@@ -7,16 +7,15 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Car;
 import edu.eci.arsw.synchdrive.model.Driver;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
@@ -98,7 +97,7 @@ public class DriverController {
         }
     }
 
-
+    /*
     @RequestMapping(path = "/{driver}/apps",method = RequestMethod.PUT)
     public ResponseEntity<?> updateApp(@PathVariable("driver") String driver,@RequestBody App app){
         try{
@@ -107,22 +106,22 @@ public class DriverController {
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 
 
 
-    @RequestMapping(path = "/{driver}",method = RequestMethod.PUT)	
+    @PutMapping(path = "/{driver}")
     public ResponseEntity<?> updateUser(@PathVariable("driver") String user,@Valid @RequestBody Driver driver){
         try {
             
             driverServices.updateDriver(user,driver);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
-            return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);            
         }        
 
     }
-
+    
     @RequestMapping(path = "/{driver}/cars",method = RequestMethod.PUT)	
     public ResponseEntity<?> updateUser(@PathVariable("driver") String driver,@Valid @RequestBody Car car){
         try {

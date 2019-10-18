@@ -98,12 +98,11 @@ public class UserServicesImpl implements UserServices {
     public void updateUser(String user, Customer customer) throws SynchdrivePersistenceException {
         Optional<Customer> optinalUser = userRepository.findByEmail(user);
         boolean present = optinalUser.isPresent();
-        System.out.println(present);
         if (!present){
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
         }else{
             Customer cus = optinalUser.get();
-            cus.setApps(customer.getApps());
+            setApps(cus,customer.getApps());
             cus.setCellPhone(customer.getCellPhone());
             cus.setFirstName(customer.getFirstName());
             cus.setLastName(customer.getLastName());
@@ -112,5 +111,34 @@ public class UserServicesImpl implements UserServices {
             userRepository.save(cus);
         }
         
+    }
+
+
+    private void setApps(Customer customer, List<App> apps) throws SynchdrivePersistenceException{
+        Boolean flag = false;
+        if (customer.getApps().isEmpty()){
+            for (App i: apps){
+                i.setCustomer(customer);
+                appRepository.save(i);
+            }
+            customer.setApps(apps);
+        }else{
+            List<App> currentApps = customer.getApps();
+            for (App i: apps){
+                for (App j: currentApps){
+                    if (j.getName().equals(i.getName())){
+                        flag = true;
+                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_ALREDY_EXISTS);
+                    }
+                }
+                if(!flag){
+                    i.setCustomer(customer);
+                    appRepository.save(i);
+                    currentApps.add(i);
+                }
+            }
+            customer.setApps(currentApps);
+        }
+
     }
 }

@@ -79,7 +79,7 @@ public class UserController {
         }
     }
 
-
+/*
     @PutMapping(path = "/{user}/apps")
     public ResponseEntity<?> addNewApp(@PathVariable("user") String user,@RequestBody App app){
         try{
@@ -88,14 +88,14 @@ public class UserController {
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 
 
-
+    
     @PutMapping(path = "/{user}")
     public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody Customer customer){
         try {
-            System.out.println(customer.getEmail());
+            //System.out.println(customer.getEmail());
             userServices.updateUser(user,customer);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
