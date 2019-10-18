@@ -127,6 +127,20 @@ public class DriverServicesImpl implements DriverServices {
         
     }
     private void setApps(Driver driver, List<App> apps) throws SynchdrivePersistenceException{
+        if (!apps.isEmpty()){
+
+            List<App> currentApps = driver.getApps();
+            for (App j: currentApps){
+                appRepository.delete(j);
+            }
+            for (App i: apps){
+                i.setDriver(driver);
+                appRepository.save(i);
+            }
+            driver.setApps(apps);
+        }
+
+        /*
         Boolean flag = false;
         if (driver.getApps().isEmpty()){
             for (App i: apps){
@@ -150,7 +164,7 @@ public class DriverServicesImpl implements DriverServices {
                 }
             }
             driver.setApps(currentApps);
-        }
+        }*/
 
     }
 

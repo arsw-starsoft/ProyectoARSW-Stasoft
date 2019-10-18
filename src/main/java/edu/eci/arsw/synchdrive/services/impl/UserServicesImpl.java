@@ -115,6 +115,19 @@ public class UserServicesImpl implements UserServices {
 
 
     private void setApps(Customer customer, List<App> apps) throws SynchdrivePersistenceException{
+        if (!apps.isEmpty()){
+
+            List<App> currentApps = customer.getApps();
+            for (App j: currentApps){
+                appRepository.delete(j);
+            }
+            for (App i: apps){
+                i.setCustomer(customer);
+                appRepository.save(i);
+            }
+            customer.setApps(apps);
+        }
+        /*
         Boolean flag = false;
         if (customer.getApps().isEmpty()){
             for (App i: apps){
@@ -138,7 +151,7 @@ public class UserServicesImpl implements UserServices {
                 }
             }
             customer.setApps(currentApps);
-        }
+        }*/
 
     }
 }
