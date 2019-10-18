@@ -1,10 +1,5 @@
 package edu.eci.arsw.synchdrive.controller;
 
-import edu.eci.arsw.synchdrive.model.App;
-import edu.eci.arsw.synchdrive.model.Customer;
-import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
-import edu.eci.arsw.synchdrive.services.UserServices;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Customer;
+import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
+import edu.eci.arsw.synchdrive.services.UserServices;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -59,6 +59,16 @@ public class UserController {
         }
     }
 
+    @GetMapping(path = "/{user}/apps")
+    public ResponseEntity<?> getAppsByEmail(@PathVariable("user") String email){
+        try{
+            
+            return new ResponseEntity<>(userServices.findAppsByEmail(email),HttpStatus.ACCEPTED);
+        }catch (SynchdrivePersistenceException ex){
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
+
     
     @PostMapping
     public ResponseEntity<?> addNewUser(@RequestBody Customer customer){
@@ -70,11 +80,12 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = "/{user}")
+
+    @PutMapping(path = "/{user}/apps")
     public ResponseEntity<?> addNewApp(@PathVariable("user") String user,@RequestBody App app){
         try{
-            userServices.saveApp(user,app);
-            return new ResponseEntity<>(app,HttpStatus.CREATED);
+            userServices.updateApps(user,app);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (SynchdrivePersistenceException ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
@@ -83,10 +94,10 @@ public class UserController {
 
 
     @PutMapping(path = "/{user}")
-    public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody App app){
+    public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody Customer customer){
         try {
             
-            userServices.updateApps(user,app);
+            userServices.updateUser(user,customer);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            

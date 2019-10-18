@@ -1,9 +1,14 @@
 package edu.eci.arsw.synchdrive.model;
 
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Customer implements Serializable {
@@ -31,11 +36,10 @@ public class Customer implements Serializable {
 
     @Column
     private String password;
-
+    
+    
     @OneToMany(mappedBy = "customer")
     private List<App> apps;
-
-
 
     public String getEmail() {
         return email;
@@ -54,7 +58,7 @@ public class Customer implements Serializable {
     }
 
     public String getLastName() {
-        return firstName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {

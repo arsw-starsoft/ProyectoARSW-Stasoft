@@ -12,7 +12,7 @@ public interface AppRepository extends JpaRepository<App,Integer> {
 
     List<App> findAll();
 
-    App save(App car);
+    App save(App app);
 
     Optional<App> findByName(String name);
 }
