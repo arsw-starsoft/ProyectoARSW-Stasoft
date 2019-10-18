@@ -24,7 +24,6 @@ import edu.eci.arsw.synchdrive.services.DriverServices;
 
 @RestController
 @RequestMapping(value = "/drivers")
-@CrossOrigin
 public class DriverController {
 
     @Autowired

@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/apps")
-@CrossOrigin
 public class AppController {
 
     @Autowired

@@ -16,7 +16,6 @@ import edu.eci.arsw.synchdrive.services.UserServices;
 
 @RestController
 @RequestMapping(value = "/users")
-@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -96,7 +95,7 @@ public class UserController {
     @PutMapping(path = "/{user}")
     public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody Customer customer){
         try {
-            
+            System.out.println(customer.getEmail());
             userServices.updateUser(user,customer);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
