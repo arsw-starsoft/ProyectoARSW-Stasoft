@@ -16,7 +16,7 @@ public class Driver implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idDriver;
 
     @Column
     private String email;

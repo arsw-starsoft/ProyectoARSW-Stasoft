@@ -16,7 +16,7 @@ public class App implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idApp;
 
     @Column
     private String name;
