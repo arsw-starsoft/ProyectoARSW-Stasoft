@@ -97,7 +97,7 @@ public class UserController {
 
     
     @PutMapping(path = "/{user}")
-    public ResponseEntity<?> addApp(@PathVariable("user") String user,@Valid @RequestBody Customer customer){
+    public ResponseEntity<?> updateUser(@PathVariable("user") String user,@Valid @RequestBody Customer customer){
         try {
             //System.out.println(customer.getEmail());
             userServices.updateUser(user,customer);
