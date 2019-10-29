@@ -16,6 +16,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.1.9.RELEASE'
 	implementation 'org.postgresql:postgresql'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.1.8.RELEASE'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
