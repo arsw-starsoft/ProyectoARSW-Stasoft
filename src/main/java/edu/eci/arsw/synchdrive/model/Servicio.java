@@ -19,13 +19,13 @@ public class Servicio implements Serializable {
     private Integer idService;
 
     @Column
-    private String precio;
+    private Double price;
 
     @Column
-    private String duracion;
+    private Double duration;
 
     @Column
-    private String distancia;
+    private Double distance;
 
     @JsonIgnore
     @ManyToOne
@@ -36,28 +36,28 @@ public class Servicio implements Serializable {
     private Customer customer;
 
 
-    public String getPrecio() {
-        return precio;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setPrecio(String precio) {
-        this.precio = precio;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public String getDuracion() {
-        return duracion;
+    public Double getDuration() {
+        return duration;
     }
 
-    public void setDuracion(String duracion) {
-        this.duracion = duracion;
+    public void setDuration(Double duration) {
+        this.duration = duration;
     }
   
-    public String getDistancia() {
-        return distancia;
+    public Double getDistance() {
+        return distance;
     }
 
-    public void setDistancia(String distancia) {
-        this.distancia = distancia;
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
   
     
@@ -77,5 +77,8 @@ public class Servicio implements Serializable {
         this.customer = customer;
     }
     
-
+    @Override
+    public String toString(){
+        return "Service {Time: " + duration + ", Price: " + price + ", Distance: " + distance+"}";
+    }
 }

@@ -26,9 +26,9 @@ public class ServicioController {
     @GetMapping(value = "/serviciotest")
     public ResponseEntity<?> testMethod() throws SynchdrivePersistenceException {
         Servicio servicio = new Servicio();
-        servicio.setPrecio("123456");
-        servicio.setDistancia("12");
-        servicio.setDuracion("15");
+        servicio.setPrice(123456.0);
+        servicio.setDistance(12.0);
+        servicio.setDuration(15.0);
         servicioServices.saveService(servicio);
         return new ResponseEntity<>(servicio, HttpStatus.CREATED);
     }
