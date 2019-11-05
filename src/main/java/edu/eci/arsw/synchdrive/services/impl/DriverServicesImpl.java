@@ -140,31 +140,7 @@ public class DriverServicesImpl implements DriverServices {
             driver.setApps(apps);
         }
 
-        /*
-        Boolean flag = false;
-        if (driver.getApps().isEmpty()){
-            for (App i: apps){
-                i.setDriver(driver);
-                appRepository.save(i);
-            }
-            driver.setApps(apps);
-        }else{
-            List<App> currentApps = driver.getApps();
-            for (App i: apps){
-                for (App j: currentApps){
-                    if (j.getName().equals(i.getName())){
-                        flag = true;
-                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_ALREDY_EXISTS);
-                    }
-                }
-                if(!flag){
-                    i.setDriver(driver);
-                    appRepository.save(i);
-                    currentApps.add(i);
-                }
-            }
-            driver.setApps(currentApps);
-        }*/
+        
 
     }
 

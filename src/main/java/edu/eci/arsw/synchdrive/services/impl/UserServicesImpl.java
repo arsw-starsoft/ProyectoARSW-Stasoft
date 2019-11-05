@@ -139,14 +139,14 @@ public class UserServicesImpl implements UserServices {
                 appRepository.delete(j);
             }
             for (App i : apps) {
-                Boolean flag = true;
+                Boolean flag = false;
                 if (i.getName().equals("Uber")) {
                     String response = HttpConnectionService.getUberApp(customer.getEmail());
                     System.out.println(response);
                     if (!response.equals("202")) {
-                        flag = false;
                         throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_NOT_FOUND);
                     }
+                    flag = true;
                 }
                 if (flag) {
                     i.setCustomer(customer);
