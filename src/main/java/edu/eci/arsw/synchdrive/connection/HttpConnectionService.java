@@ -32,6 +32,20 @@ public class HttpConnectionService {
         
          return Integer.toString(responseCode);
     }
+    public static String getUberAppDriver(String name) throws IOException {
+    	String url = "https://uber-backend-starsoft.herokuapp.com/drivers/" + name;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
+        
+        
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        
+         return Integer.toString(responseCode);
+    }
 
     private static String getAPPS(String appName,Coordinate coordinate) throws IOException {
     	String url = "https://uber-backend-starsoft.herokuapp.com/servicios";

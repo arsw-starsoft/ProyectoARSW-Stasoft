@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.eci.arsw.synchdrive.connection.HttpConnectionService;
 import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Car;
 import edu.eci.arsw.synchdrive.model.Driver;
@@ -108,7 +110,7 @@ public class DriverServicesImpl implements DriverServices {
     
 
     @Override
-    public void updateDriver(String user, Driver driver) throws SynchdrivePersistenceException {
+    public void updateDriver(String user, Driver driver) throws SynchdrivePersistenceException, IOException  {
         Optional<Driver> optinalDriver = driverRepository.findByEmail(user);
         boolean present = optinalDriver.isPresent();
         if (!present){
@@ -126,18 +128,35 @@ public class DriverServicesImpl implements DriverServices {
         }
         
     }
-    private void setApps(Driver driver, List<App> apps) throws SynchdrivePersistenceException{
+    private void setApps(Driver driver, List<App> apps) throws SynchdrivePersistenceException, IOException {
+        
+        List<App> newApps = new ArrayList<>();
         if (!apps.isEmpty()){
 
             List<App> currentApps = driver.getApps();
             for (App j: currentApps){
                 appRepository.delete(j);
             }
-            for (App i: apps){
-                i.setDriver(driver);
-                appRepository.save(i);
+            for (App i : apps) {
+                Boolean flag = false;
+                if (i.getName().equals("Uber")) {
+                    String response = HttpConnectionService.getUberAppDriver(driver.getEmail());
+                    System.out.println(response);
+                    
+                    if (!response.equals("202")) {
+                        
+                        //throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_NOT_FOUND);
+                    }
+                    flag = true;
+                }
+                if (true) {
+                    i.setDriver(driver);
+                    appRepository.save(i);
+                    newApps.add(i);
+                }
             }
-            driver.setApps(apps);
+            driver.setApps(newApps);
+
         }
 
         

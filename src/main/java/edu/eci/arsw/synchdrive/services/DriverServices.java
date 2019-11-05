@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.eci.arsw.synchdrive.model.App;
@@ -21,7 +22,7 @@ public interface DriverServices {
 
     List<Car> findCarsByEmail(String user) throws SynchdrivePersistenceException;
 
-    void updateDriver(String user, Driver driver) throws SynchdrivePersistenceException;
+    void updateDriver(String user, Driver driver) throws SynchdrivePersistenceException, IOException ;
 
     void updateCar(String user, Car car) throws SynchdrivePersistenceException;
 

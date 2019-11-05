@@ -143,12 +143,14 @@ public class UserServicesImpl implements UserServices {
                 if (i.getName().equals("Uber")) {
                     String response = HttpConnectionService.getUberApp(customer.getEmail());
                     System.out.println(response);
+                    
                     if (!response.equals("202")) {
-                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_NOT_FOUND);
+                        
+                        //throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_NOT_FOUND);
                     }
                     flag = true;
                 }
-                if (flag) {
+                if (true) {
                     i.setCustomer(customer);
                     appRepository.save(i);
                     newApps.add(i);

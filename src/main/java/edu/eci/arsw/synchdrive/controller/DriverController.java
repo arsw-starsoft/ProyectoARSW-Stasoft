@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -116,9 +117,12 @@ public class DriverController {
             
             driverServices.updateDriver(user,driver);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);            
-        }        
+        } catch (SynchdrivePersistenceException ex) {
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
+        }catch (IOException ex) {
+            return new ResponseEntity<>("Problemas con la app de uber",HttpStatus.BAD_REQUEST);            
+        }
+       
 
     }
     
