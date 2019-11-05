@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+
+import edu.eci.arsw.synchdrive.model.Coordinate;
 import edu.eci.arsw.synchdrive.model.Customer;
+import edu.eci.arsw.synchdrive.model.Servicio;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.UserServices;
 
@@ -102,10 +106,29 @@ public class UserController {
             //System.out.println(customer.getEmail());
             userServices.updateUser(user,customer);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (Exception ex) {
+        } catch (SynchdrivePersistenceException ex) {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
-        }        
+        }catch (IOException ex) {
+            return new ResponseEntity<>("Problemas con la app de uber",HttpStatus.BAD_REQUEST);            
+        }
 
+    }
+
+
+    
+    @GetMapping(value = "/{user}/service")
+    public ResponseEntity<?> getCloseServices(@PathVariable("user") String user,@Valid @RequestBody Coordinate coordinate){
+        
+        List<Servicio> servicios;
+        try {
+            servicios = userServices.getCloseServices(user,coordinate);
+            return new ResponseEntity<>(servicios,HttpStatus.ACCEPTED);
+        } catch (SynchdrivePersistenceException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.FORBIDDEN); 
+        }catch (IOException ex) {
+            return new ResponseEntity<>("Problemas con las apps",HttpStatus.BAD_REQUEST);            
+        }
+        
     }
 
 }

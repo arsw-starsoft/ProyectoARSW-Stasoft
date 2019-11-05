@@ -27,11 +27,11 @@ public class Servicio implements Serializable {
     @Column
     private Double distance;
 
-    @JsonIgnore
+   
     @ManyToOne
     private Driver driver;
     
-    @JsonIgnore
+    
     @ManyToOne
     private Customer customer;
 

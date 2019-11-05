@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import edu.eci.arsw.synchdrive.connection.HttpConnectionService;
 import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Coordinate;
 import edu.eci.arsw.synchdrive.model.Customer;
+import edu.eci.arsw.synchdrive.model.Servicio;
 import edu.eci.arsw.synchdrive.persistence.AppRepository;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
@@ -65,25 +69,23 @@ public class UserServicesImpl implements UserServices {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
         return optinalUser.get().getApps();
     }
-    
-    
 
     @Override
     public void updateApps(String customer, App app) throws SynchdrivePersistenceException {
         Optional<Customer> optinalUser = userRepository.findByEmail(customer);
         boolean present = optinalUser.isPresent();
-        if (!present){
+        if (!present) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
-        }else{
+        } else {
             Customer cus = optinalUser.get();
             app.setCustomer(cus);
             appRepository.save(app);
-            
-            if (!cus.getApps().isEmpty()){
+
+            if (!cus.getApps().isEmpty()) {
                 List<App> apps = cus.getApps();
                 apps.add(app);
                 cus.setApps(apps);
-            }else{
+            } else {
                 List<App> newApp = new ArrayList<>();
                 newApp.add(app);
                 cus.setApps(newApp);
@@ -91,18 +93,18 @@ public class UserServicesImpl implements UserServices {
             userRepository.save(cus);
 
         }
-        
+
     }
 
     @Override
-    public void updateUser(String user, Customer customer) throws SynchdrivePersistenceException {
+    public void updateUser(String user, Customer customer) throws SynchdrivePersistenceException, IOException {
         Optional<Customer> optinalUser = userRepository.findByEmail(user);
         boolean present = optinalUser.isPresent();
-        if (!present){
+        if (!present) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
-        }else{
+        } else {
             Customer cus = optinalUser.get();
-            setApps(cus,customer.getApps());
+            setApps(cus, customer.getApps());
             cus.setCellPhone(customer.getCellPhone());
             cus.setFirstName(customer.getFirstName());
             cus.setLastName(customer.getLastName());
@@ -110,50 +112,54 @@ public class UserServicesImpl implements UserServices {
             cus.setPassword(customer.getPassword());
             userRepository.save(cus);
         }
-        
+
     }
 
+    @Override
+    public List<Servicio> getCloseServices(String user,Coordinate coordinate) throws SynchdrivePersistenceException , IOException {
+        List<Servicio> serviciosPosibles = new ArrayList<>();
+        for (App i : userRepository.findByEmail(user).get().getApps()){
 
-    private void setApps(Customer customer, List<App> apps) throws SynchdrivePersistenceException{
-        if (!apps.isEmpty()){
+            Servicio[] servicesApp = HttpConnectionService.getCloseServices(i.getName(),coordinate);
+            for (int j = 0 ; j< 3;j++){
+                serviciosPosibles.add(servicesApp[j]);
+            }
+        }
+        
+        return serviciosPosibles;
+    }
+
+    private void setApps(Customer customer, List<App> apps) throws SynchdrivePersistenceException, IOException {
+
+        List<App> newApps = new ArrayList<>();
+        if (!apps.isEmpty()) {
 
             List<App> currentApps = customer.getApps();
-            for (App j: currentApps){
+            for (App j : currentApps) {
                 appRepository.delete(j);
             }
-            for (App i: apps){
-                i.setCustomer(customer);
-                appRepository.save(i);
-            }
-            customer.setApps(apps);
-        }
-        /*
-        Boolean flag = false;
-        if (customer.getApps().isEmpty()){
-            for (App i: apps){
-                i.setCustomer(customer);
-                appRepository.save(i);
-            }
-            customer.setApps(apps);
-        }else{
-            List<App> currentApps = customer.getApps();
-            for (App i: apps){
-                for (App j: currentApps){
-                    if (j.getName().equals(i.getName())){
-                        flag = true;
-                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_ALREDY_EXISTS);
+            for (App i : apps) {
+                Boolean flag = true;
+                if (i.getName().equals("Uber")) {
+                    String response = HttpConnectionService.getUberApp(customer.getEmail());
+                    System.out.println(response);
+                    if (!response.equals("202")) {
+                        flag = false;
+                        throw new SynchdrivePersistenceException(SynchdrivePersistenceException.APP_NOT_FOUND);
                     }
                 }
-                if(!flag){
+                if (flag) {
                     i.setCustomer(customer);
                     appRepository.save(i);
-                    currentApps.add(i);
+                    newApps.add(i);
                 }
             }
-            customer.setApps(currentApps);
-        }*/
+            customer.setApps(newApps);
+        }
 
     }
+
+    
 
     
 }

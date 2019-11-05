@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
+
+import edu.eci.arsw.synchdrive.model.Coordinate;
 import edu.eci.arsw.synchdrive.model.Servicio;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.ServicioServices;
@@ -41,6 +44,7 @@ public class ServicioController {
         return new ResponseEntity<>(servicios,HttpStatus.ACCEPTED);
     }
     
+
 
     
     @PostMapping
