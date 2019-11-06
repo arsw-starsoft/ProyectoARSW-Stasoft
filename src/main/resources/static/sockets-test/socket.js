@@ -30,6 +30,7 @@ var app = (function () {
     }
 
     var stompClient = null;
+    var serviceObjectDriver = null;
 
     //Se conecta a el usuario a stomp
     var connectAndSubscribeUser = function () {
@@ -39,7 +40,7 @@ var app = (function () {
 
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
-            stompClient.subscribe("/topic/services.users", function (eventBody) {
+            stompClient.subscribe("/topic/services.users.test@mail.com", function (eventBody) {
                 var object = JSON.parse(eventBody.body);
                 console.log(object);
             });
@@ -62,7 +63,7 @@ var app = (function () {
             console.log("Connected: " + frame);
             stompClient.subscribe("/topic/services" + stringMessage, function (eventBody) {
                 var object = JSON.parse(eventBody.body);
-                console.log(object);
+                serviceObjectDriver = object;
             });
         });
     };
@@ -86,10 +87,42 @@ var app = (function () {
         stompClient.send("/app/services" + stringMessage, {}, JSON.stringify(service));
     };
 
+    var connectAndSubscribeDriverToSingle = function (usernameService,callback) {
+        console.log("Connecting to WS...");
+        var socket = new SockJS("/stompendpoint");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log("Connected: " + frame);
+            stompClient.subscribe("/topic/services.users." + usernameService, function (eventBody) {
+                var object = JSON.parse(eventBody.body);
+                serviceObjectDriver = object;
+            });
+        });
+        callback("/app/services.users."+usernameService,{},JSON.stringify(serviceObjectDriver));
+    };
+
+    var acceptService = function (usernameService) {
+        console.log("Disconnecting from services...");
+        disconnect();
+        console.log("Connected to single stomp");
+        connectAndSubscribeDriverToSingle(usernameService,stompClient.send);
+        console.log("Accepting service from " + usernameService + "...");
+    };
+
+    var disconnect = function() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+        //setConnected(false);
+        console.log("Disconnected");
+    };
+
     return {
         connectAndSubscribeDriver: connectAndSubscribeDriver,
         connectAndSubscribeUser : connectAndSubscribeUser,
-        publishService: publishService
+        publishService: publishService,
+        acceptService: acceptService
     }
 
 })();
