@@ -1,40 +1,95 @@
 var app = (function () {
 
-    class Service{
-        constructor(price, duration,distance){
+    class Service {
+        constructor(price, duration, distance, customer) {
             this.price = price;
             this.duration = duration;
             this.distance = distance;
+            this.customer = customer;
         }
+
+    }
+
+    class Customer {
+        constructor(email, firstName, lastName, userName, cellPhone, password, apps) {
+            this.email = email;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.userName = userName;
+            this.cellPhone = cellPhone;
+            this.password = password;
+            this.apps = apps;
+        }
+    }
+
+    class App{
+        constructor(name) {
+            this.name = name;
+        }
+
     }
 
     var stompClient = null;
 
-    var connectAndSubscribe = function(){
+    //Se conecta a el usuario a stomp
+    var connectAndSubscribeUser = function () {
         console.log("Connecting to WS...");
         var socket = new SockJS("/stompendpoint");
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
-            stompClient.subscribe("/topic/services",function (eventBody) {
+            stompClient.subscribe("/topic/services.users", function (eventBody) {
                 var object = JSON.parse(eventBody.body);
                 console.log(object);
             });
         });
     };
 
+    //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
+    var connectAndSubscribeDriver = function (listApps) {
+        console.log("Connecting to WS...");
+        listApps.sort(); //Ordenar para el back message
+        var stringMessage = "";
+        listApps.forEach(function (app) {
+            stringMessage += "." + app;
+        });
+        console.log(stringMessage);
+        var socket = new SockJS("/stompendpoint");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log("Connected: " + frame);
+            stompClient.subscribe("/topic/services" + stringMessage, function (eventBody) {
+                var object = JSON.parse(eventBody.body);
+                console.log(object);
+            });
+        });
+    };
+
+    //El usuario publica en el topico x
     var publishService = function () {
-      console.log("Publishing....");
-      var service = new Service(15,15,100);
-      console.log(service);
-      console.log(stompClient);
-      stompClient.send("/app/services",{},JSON.stringify(service));
+        console.log("Publishing....");
+        var customer = new Customer("test@mail.com","Test","TT","test","44564","123",[new App("Uber")]);
+        var service = new Service(null,null,null,customer);
+        console.log(service);
+        console.log(stompClient);
+        var listApps = customer.apps;
+        listApps.sort(function (n1,n2) {
+            return n1 > n2;
+        }); //Ordenar para el back message
+        var stringMessage = "";
+        listApps.forEach(function (app) {
+            stringMessage += "." + app.name.toLowerCase();
+        });
+        console.log(stringMessage);
+        stompClient.send("/app/services" + stringMessage, {}, JSON.stringify(service));
     };
 
     return {
-        connectAndSubscribe: connectAndSubscribe,
-        publishService:publishService
+        connectAndSubscribeDriver: connectAndSubscribeDriver,
+        connectAndSubscribeUser : connectAndSubscribeUser,
+        publishService: publishService
     }
 
 })();
