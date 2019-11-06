@@ -1,12 +1,15 @@
 package edu.eci.arsw.synchdrive.controller.stomp;
 
+import edu.eci.arsw.synchdrive.connection.HttpConnectionService;
 import edu.eci.arsw.synchdrive.model.Servicio;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-
 
 @Controller
 public class STOMPMessagesHandlerDriverServices {
@@ -15,9 +18,19 @@ public class STOMPMessagesHandlerDriverServices {
     SimpMessagingTemplate msgt;
 
     @MessageMapping("/services.{appOne}")
-    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName1){
+    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName1) {
         System.out.println("Nueva solicitud de servicio " + servicio + " " + appName1);
-        //Generar servicio
+        // Generar servicio
+        try {
+            Servicio servicio2 = HttpConnectionService.getGenerateUber(servicio);
+            servicio = servicio2;
+        } catch (IOException e) {
+            
+        }
+
+
+        
+        
         msgt.convertAndSend("/topic/services."+appName1,servicio);
     }
 
