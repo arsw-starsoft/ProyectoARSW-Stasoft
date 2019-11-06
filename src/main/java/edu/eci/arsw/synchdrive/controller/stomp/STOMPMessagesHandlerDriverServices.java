@@ -7,8 +7,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 @Controller
 public class STOMPMessagesHandlerDriverServices {
@@ -17,9 +15,20 @@ public class STOMPMessagesHandlerDriverServices {
     SimpMessagingTemplate msgt;
 
     @MessageMapping("/services.{appOne}")
-    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName){
-        //System.out.println("New service! " + servicio + " " + appName);
-        msgt.convertAndSend("/topic/services."+appName,servicio);
+    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName1){
+        System.out.println("Nueva solicitud de servicio " + servicio + " " + appName1);
+        //Generar servicio
+        msgt.convertAndSend("/topic/services."+appName1,servicio);
+    }
+
+    @MessageMapping("/services.{appOne}.{appTwo}")
+    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName1,@DestinationVariable("appTwo") String appName2){
+        //TODO
+    }
+
+    @MessageMapping("/services.{appOne}.{appTwo}.{appThree}")
+    public void handleServiceEvent(Servicio servicio, @DestinationVariable("appOne") String appName1,@DestinationVariable("appTwo") String appName2,@DestinationVariable("appThree") String appName3){
+        //TODO
     }
 
 

@@ -49,10 +49,10 @@ var app = (function () {
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var connectAndSubscribeDriver = function (listApps) {
         console.log("Connecting to WS...");
-        listApps.sort(); //Ordenar para el back message
+        listApps.sort(); //Ordenar para el back message  uber didi beat
         var stringMessage = "";
         listApps.forEach(function (app) {
-            stringMessage += "." + app;
+            stringMessage += "." + app.toLowerCase();
         });
         console.log(stringMessage);
         var socket = new SockJS("/stompendpoint");
