@@ -18,7 +18,10 @@ public class SynchdriveWebSocketConfig implements WebSocketMessageBrokerConfigur
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry){
-        registry.addEndpoint("/stompendpoint").withSockJS();
+        registry.addEndpoint("/stompendpoint")
+                .setAllowedOrigins("*")
+                .withSockJS()
+                .setSupressCors(true);
     }
 
 }
