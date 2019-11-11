@@ -93,7 +93,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/h2-console/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST,"/users").permitAll().and()
-                .authorizeRequests().antMatchers(HttpMethod.POST,"/drivers").permitAll().
+                .authorizeRequests().antMatchers(HttpMethod.POST,"/drivers").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/stompendpoint/**").permitAll().and()
+                .authorizeRequests().antMatchers("/topic/**").permitAll().and()
+                .authorizeRequests().antMatchers("/app/**").permitAll().
 
 // all other requests need to be authenticated
         //anyRequest().authenticated().
