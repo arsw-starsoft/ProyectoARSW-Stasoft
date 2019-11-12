@@ -2,12 +2,7 @@ package edu.eci.arsw.synchdrive.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,12 +22,14 @@ public class Servicio implements Serializable {
     @Column
     private Double distance;
 
-   
-    @ManyToOne
+    @Column
+    private Boolean active;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private Driver driver;
     
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
 
@@ -80,5 +77,13 @@ public class Servicio implements Serializable {
     @Override
     public String toString(){
         return "Service {Time: " + duration + ", Price: " + price + ", Distance: " + distance+"}";
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

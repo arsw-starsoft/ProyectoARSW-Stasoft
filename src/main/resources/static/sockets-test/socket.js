@@ -1,11 +1,12 @@
 var app = (function () {
 
     class Service {
-        constructor(price, duration, distance, customer) {
+        constructor(price, duration, distance, customer, active) {
             this.price = price;
             this.duration = duration;
             this.distance = distance;
             this.customer = customer;
+            this.active = active;
         }
 
     }
@@ -23,7 +24,7 @@ var app = (function () {
     }
 
     class App{
-        constructor(name) {
+        constructor(name,user,driver) {
             this.name = name;
         }
 
@@ -50,65 +51,30 @@ var app = (function () {
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var connectAndSubscribeDriver = function (listApps) {
         console.log("Connecting to WS...");
-        listApps.sort(); //Ordenar para el back message  uber didi beat
-        var stringMessage = "";
-        listApps.forEach(function (app) {
-            stringMessage += "." + app.toLowerCase();
-        });
-        console.log(stringMessage);
         var socket = new SockJS("/stompendpoint");
         stompClient = Stomp.over(socket);
-
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
-            stompClient.subscribe("/topic/services" + stringMessage, function (eventBody) {
-                var object = JSON.parse(eventBody.body);
-                serviceObjectDriver = object;
+            listApps.forEach(function (app) {
+                console.log("Subscribing to " + app.toLowerCase());
+                stompClient.subscribe("/topic/services." + app.toLowerCase(), function (eventBody) {
+                    var object = JSON.parse(eventBody.body);
+                    serviceObjectDriver = object;
+                });
             });
         });
     };
 
-    //El usuario publica en el topico x
+    //El usuario publica servicio en /app/services
     var publishService = function () {
         console.log("Publishing....");
         var customer = new Customer("test@mail.com","Test","TT","test","44564","123",[new App("Uber")]);
-        var service = new Service(null,null,null,customer);
+        var service = new Service(null,null,null,customer,true);
         console.log(service);
         console.log(stompClient);
-        var listApps = customer.apps;
-        listApps.sort(function (n1,n2) {
-            return n1 > n2;
-        }); //Ordenar para el back message
-        var stringMessage = "";
-        listApps.forEach(function (app) {
-            stringMessage += "." + app.name.toLowerCase();
-        });
-        console.log(stringMessage);
-        stompClient.send("/app/services" + stringMessage, {}, JSON.stringify(service));
+        stompClient.send("/app/services", {}, JSON.stringify(service));
     };
 
-    var connectAndSubscribeDriverToSingle = function (usernameService,callback) {
-        console.log("Connecting to WS...");
-        var socket = new SockJS("/stompendpoint");
-        stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function (frame) {
-            console.log("Connected: " + frame);
-            stompClient.subscribe("/topic/services.users." + usernameService, function (eventBody) {
-                var object = JSON.parse(eventBody.body);
-                serviceObjectDriver = object;
-            });
-        });
-        callback("/app/services.users."+usernameService,{},JSON.stringify(serviceObjectDriver));
-    };
-
-    var acceptService = function (usernameService) {
-        console.log("Disconnecting from services...");
-        disconnect();
-        console.log("Connected to single stomp");
-        connectAndSubscribeDriverToSingle(usernameService,stompClient.send);
-        console.log("Accepting service from " + usernameService + "...");
-    };
 
     var disconnect = function() {
         if (stompClient !== null) {
@@ -122,7 +88,6 @@ var app = (function () {
         connectAndSubscribeDriver: connectAndSubscribeDriver,
         connectAndSubscribeUser : connectAndSubscribeUser,
         publishService: publishService,
-        acceptService: acceptService
     }
 
 })();
