@@ -17,12 +17,11 @@ public class App implements Serializable {
     private String name;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Driver driver;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @ManyToOne
     private Customer customer;
     
     public String getName() {
