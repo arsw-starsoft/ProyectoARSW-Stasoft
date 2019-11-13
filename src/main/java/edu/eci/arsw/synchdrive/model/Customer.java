@@ -31,7 +31,7 @@ public class Customer implements Serializable {
     @Column
     private String password;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<App> apps;
 
     public String getEmail() {

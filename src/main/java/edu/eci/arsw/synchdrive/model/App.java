@@ -19,8 +19,10 @@ public class App implements Serializable {
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private Driver driver;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
     
     public String getName() {

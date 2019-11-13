@@ -146,9 +146,13 @@ public class HttpConnectionService {
 
     public static Servicio getGenerateUber(Servicio serv) throws IOException{
         List<App> apps = serv.getCustomer().getApps();
+        Customer cust =serv.getCustomer();
 		String data = getServiceUber(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
-		service.setCustomer(serv.getCustomer());
+		for (App app: cust.getApps()){
+		    app.setCustomer(cust);
+        }
+        service.setCustomer(cust);
 		return service;
 
 	}
