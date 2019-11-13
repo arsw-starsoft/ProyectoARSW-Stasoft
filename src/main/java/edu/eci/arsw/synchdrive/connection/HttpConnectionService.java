@@ -12,6 +12,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Customer;
 import org.springframework.stereotype.Component;
 
 import edu.eci.arsw.synchdrive.model.Coordinate;
@@ -144,10 +145,10 @@ public class HttpConnectionService {
     
 
     public static Servicio getGenerateUber(Servicio serv) throws IOException{
-        List<App> appsOfUser = serv.getCustomer().getApps();
+        List<App> apps = serv.getCustomer().getApps();
 		String data = getServiceUber(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
-		service.getCustomer().setApps(appsOfUser);
+		service.setCustomer(serv.getCustomer());
 		return service;
 
 	}

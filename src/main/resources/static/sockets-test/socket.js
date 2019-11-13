@@ -68,7 +68,7 @@ var app = (function () {
     //El usuario publica servicio en /app/services
     var publishService = function () {
         console.log("Publishing....");
-        var customer = new Customer("test@mail.com","Test","TT","test","44564","123",[new App("Uber")]);
+        var customer = new Customer("test@mail.com","Test","TT","test","44564","123",[new App("Uber"),new App("Didi"),new App("Beat")]);
         var service = new Service(null,null,null,customer,true);
         console.log(service);
         console.log(stompClient);

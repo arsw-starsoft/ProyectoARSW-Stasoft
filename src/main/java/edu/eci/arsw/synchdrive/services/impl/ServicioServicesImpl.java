@@ -1,8 +1,11 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -18,12 +21,18 @@ import edu.eci.arsw.synchdrive.services.ServicioServices;
 @Service
 public class ServicioServicesImpl implements ServicioServices {
 
-    private Queue<Servicio> servicesQueue;
+    private Map<String,Queue<Servicio>> servicesMap;
 
     private AtomicBoolean started;
 
+    @Autowired
+    private ServicioRepository servicioRepository;
+
     public ServicioServicesImpl(){
-        servicesQueue = new ConcurrentLinkedQueue<>();
+        servicesMap = new ConcurrentHashMap();
+        servicesMap.put("uber",new ConcurrentLinkedQueue<>());
+        servicesMap.put("didi",new ConcurrentLinkedQueue<>());
+        servicesMap.put("beat",new ConcurrentLinkedQueue<>());
         started = new AtomicBoolean(false);
     }
 
@@ -41,28 +50,57 @@ public class ServicioServicesImpl implements ServicioServices {
     }
 
     @Override
-    public Queue<Servicio> generateServices(Servicio servicio) {
+    public Map<String,Queue<Servicio>> generateServices(Servicio servicio) {
         try {
-            Servicio generatedService = null;
             for (App app : servicio.getCustomer().getApps()) {
+                Servicio generatedService = new Servicio(); //Temporal
                 switch (app.getName().toLowerCase()) {
                     case "uber":
                         generatedService = HttpConnectionService.getGenerateUber(servicio);
-                        System.out.println(generatedService);
+                        servicesMap.get("uber").add(generatedService);
+                        serviceRepository.save(generatedService);
                         break;
                     case "didi":
                         //TODO
+                        //servicesMap.get("didi").add(generatedService);
+                        //serviceRepository.save(generatedService);
                         break;
                     case "beat":
                         //TODO
+                        //servicesMap.get("beat").add(generatedService);
+                        //serviceRepository.save(generatedService);
                         break;
                 }
-                servicesQueue.add(generatedService);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
-        return servicesQueue;
+        return servicesMap;
+    }
+
+    @Override
+    public Map<String, Queue<Servicio>> loadActiveServices(){
+        List<Servicio> activeServices = serviceRepository.getAllByActiveIsTrue();
+        for (Servicio active: activeServices){
+            for (App app : active.getCustomer().getApps()) {
+                switch (app.getName().toLowerCase()) {
+                    case "uber":
+                        servicesMap.get("uber").add(active);
+                        break;
+                    case "didi":
+                        //TODO
+                        //servicesMap.get("didi").add(generatedService);
+                        //serviceRepository.save(generatedService);
+                        break;
+                    case "beat":
+                        //TODO
+                        //servicesMap.get("beat").add(generatedService);
+                        //serviceRepository.save(generatedService);
+                        break;
+                }
+            }
+        }
+        return servicesMap;
     }
 
     @Override
@@ -77,7 +115,10 @@ public class ServicioServicesImpl implements ServicioServices {
 
     @Override
     public void cleanServices() {
-        servicesQueue.clear();
+        servicesMap.clear();
+        servicesMap.put("uber",new ConcurrentLinkedQueue<>());
+        servicesMap.put("didi",new ConcurrentLinkedQueue<>());
+        servicesMap.put("beat",new ConcurrentLinkedQueue<>());
     }
 
 }

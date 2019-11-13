@@ -14,5 +14,5 @@ public interface ServicioRepository extends JpaRepository<Servicio,Integer> {
 
     Servicio save(Servicio service);
 
-    
+    List<Servicio> getAllByActiveIsTrue();
 }

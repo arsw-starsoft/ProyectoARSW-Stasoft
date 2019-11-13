@@ -3,7 +3,10 @@ package edu.eci.arsw.synchdrive.services;
 import java.util.List;
 
 import edu.eci.arsw.synchdrive.model.Servicio;
+
+import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public interface ServicioServices {
@@ -12,7 +15,9 @@ public interface ServicioServices {
 
     void saveService(Servicio service);
 
-    Queue<Servicio> generateServices(Servicio servicio);
+    Map<String, Queue<Servicio>> generateServices(Servicio servicio);
+
+    Map<String, Queue<Servicio>> loadActiveServices();
 
     boolean isStarted();
 
