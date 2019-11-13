@@ -23,6 +23,18 @@ var app = (function () {
         }
     }
 
+    class Driver {
+        constructor(email, firstName, lastName, userName, cellPhone, password, apps) {
+            this.email = email;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.userName = userName;
+            this.cellPhone = cellPhone;
+            this.password = password;
+            this.apps = apps;
+        }
+    }
+
     class App{
         constructor(name,user,driver) {
             this.name = name;

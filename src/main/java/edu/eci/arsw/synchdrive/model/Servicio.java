@@ -33,6 +33,16 @@ public class Servicio implements Serializable {
     private Customer customer;
 
 
+    public Integer getIdService() {
+        return idService;
+    }
+
+    public void setIdService(Integer idService) {
+        if (idService != null){
+            this.idService = idService;
+        }
+        
+    }
     public Double getPrice() {
         return price;
     }

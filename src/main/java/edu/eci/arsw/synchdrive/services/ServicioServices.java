@@ -3,6 +3,7 @@ package edu.eci.arsw.synchdrive.services;
 import java.util.List;
 
 import edu.eci.arsw.synchdrive.model.Servicio;
+import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 
 import java.util.Map;
 import java.util.Queue;
@@ -24,5 +25,8 @@ public interface ServicioServices {
     void setStarted(boolean started);
 
     void cleanServices();
+
+    void acceptService(String driver,String app,Servicio servicio) throws SynchdrivePersistenceException;
+
 
 }

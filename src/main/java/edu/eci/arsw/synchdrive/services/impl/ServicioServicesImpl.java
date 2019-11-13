@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -11,11 +12,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.eci.arsw.synchdrive.connection.HttpConnectionService;
 import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Driver;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.arsw.synchdrive.model.Servicio;
+import edu.eci.arsw.synchdrive.persistence.DriverRepository;
 import edu.eci.arsw.synchdrive.persistence.ServicioRepository;
+import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.services.ServicioServices;
 
 @Service
@@ -26,7 +31,7 @@ public class ServicioServicesImpl implements ServicioServices {
     private AtomicBoolean started;
 
     @Autowired
-    private ServicioRepository servicioRepository;
+    private DriverRepository driverRepository;
 
     public ServicioServicesImpl(){
         servicesMap = new ConcurrentHashMap();
@@ -119,6 +124,31 @@ public class ServicioServicesImpl implements ServicioServices {
         servicesMap.put("uber",new ConcurrentLinkedQueue<>());
         servicesMap.put("didi",new ConcurrentLinkedQueue<>());
         servicesMap.put("beat",new ConcurrentLinkedQueue<>());
+    }
+
+    @Override
+    public void acceptService(String driver,String app,Servicio servicio) throws SynchdrivePersistenceException{
+
+        Optional<Servicio> optionalService = serviceRepository.findById(servicio.getIdService());
+
+        if (optionalService.isPresent()){
+            Servicio serv = optionalService.get();
+            if (serv.getActive()){
+                serv.setActive(false);
+                Optional<Driver> optionalDriver = driverRepository.findByEmail(driver);
+                if (!optionalDriver.isPresent()){
+                    throw new SynchdrivePersistenceException(SynchdrivePersistenceException.DRIVER_NOT_FOUND);
+                }
+                serv.setDriver(optionalDriver.get());
+                serviceRepository.save(serv);
+            }else{
+                throw new SynchdrivePersistenceException(SynchdrivePersistenceException.SERVICE_NOT_ACTIVE);
+            }
+
+        }else{
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.SERVICE_NOT_FOUND);
+        }
+
     }
 
 }
