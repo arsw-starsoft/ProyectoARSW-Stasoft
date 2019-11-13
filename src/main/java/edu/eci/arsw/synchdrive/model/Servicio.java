@@ -25,11 +25,11 @@ public class Servicio implements Serializable {
     @Column
     private Boolean active;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Driver driver;
     
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Customer customer;
 
 
