@@ -73,18 +73,21 @@ public class ServicioServicesImpl implements ServicioServices {
                         generatedService.setDuration(temp.getDuration());
                         generatedService.setPrice(temp.getPrice());
                         generatedService.setDistance(temp.getDistance());
+                        generatedService.setActive(temp.getActive());
                         break;
                     case "uber":
                         Servicio temp2 = HttpConnectionService.getGenerateUber(servicio);
                         generatedService.setDuration(temp2.getDuration());
                         generatedService.setPrice(temp2.getPrice());
                         generatedService.setDistance(temp2.getDistance());
+                        generatedService.setActive(temp2.getActive());
                         break;
                     case "beat":
                         Servicio temp3 = HttpConnectionService.getGenerateBeat(servicio);
                         generatedService.setDuration(temp3.getDuration());
                         generatedService.setPrice(temp3.getPrice());
                         generatedService.setDistance(temp3.getDistance());
+                        generatedService.setActive(temp3.getActive());
                         break;
                 }
                 generatedService.setCustomer(customer);

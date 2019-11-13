@@ -82,7 +82,7 @@ public class HttpConnectionService {
     }
 
     private static String getServiceDidi(Servicio serv) throws IOException {
-    	String url = "https://didi-backend-starsoft.herokuapp.com/generate";
+    	String url = "https://didi-backend-starsoft.herokuapp.com/servicios/generate";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setDoOutput(true);
@@ -125,7 +125,7 @@ public class HttpConnectionService {
     }
 
     private static String getServiceBeat(Servicio serv) throws IOException {
-    	String url = "https://beat-backend-starsoft.herokuapp.com/generate";
+    	String url = "https://beat-backend-starsoft.herokuapp.com/servicios/generate";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setDoOutput(true);

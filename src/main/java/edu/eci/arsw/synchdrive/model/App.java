@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 
 @Entity
 public class App implements Serializable {
@@ -18,10 +19,12 @@ public class App implements Serializable {
 
     @JsonIgnore
     @ManyToOne
+    @Expose
     private Driver driver;
 
     @JsonIgnore
     @ManyToOne
+    @Expose
     private Customer customer;
     
     public String getName() {
