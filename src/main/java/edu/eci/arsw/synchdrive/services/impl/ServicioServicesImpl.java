@@ -65,24 +65,28 @@ public class ServicioServicesImpl implements ServicioServices {
 
         try {
             for (App app : servicio.getCustomer().getApps()) {
-                Servicio generatedService = new Servicio(); //Temporal
+                Servicio generatedServiceuber = new Servicio(); //Temporal
+                Servicio generatedServicedidi = new Servicio();
+                Servicio generatedServicebeat = new Servicio();
+                Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
                 switch (app.getName().toLowerCase()) {
-                    case "uber":
-                        generatedService = HttpConnectionService.getGenerateUber(servicio);
-                        Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
-                        generatedService.setCustomer(customer);
-                        servicesMap.get("uber").add(generatedService);
-                        serviceRepository.save(generatedService);
-                        break;
                     case "didi":
-                        //TODO
-                        //servicesMap.get("didi").add(generatedService);
-                        //serviceRepository.save(generatedService);
+                        generatedServicedidi = HttpConnectionService.getGenerateDidi(servicio);
+                        generatedServicedidi.setCustomer(customer);
+                        servicesMap.get("didi").add(generatedServicedidi);
+                        serviceRepository.save(generatedServicedidi);
+                        break;
+                    case "uber":
+                        generatedServiceuber = HttpConnectionService.getGenerateUber(servicio);
+                        generatedServiceuber.setCustomer(customer);
+                        servicesMap.get("uber").add(generatedServiceuber);
+                        serviceRepository.save(generatedServiceuber);
                         break;
                     case "beat":
-                        //TODO
-                        //servicesMap.get("beat").add(generatedService);
-                        //serviceRepository.save(generatedService);
+                        generatedServicebeat = HttpConnectionService.getGenerateBeat(servicio);
+                        generatedServicebeat.setCustomer(customer);
+                        servicesMap.get("beat").add(generatedServicebeat);
+                        serviceRepository.save(generatedServicebeat);
                         break;
                 }
             }
@@ -102,14 +106,10 @@ public class ServicioServicesImpl implements ServicioServices {
                         servicesMap.get("uber").add(active);
                         break;
                     case "didi":
-                        //TODO
-                        //servicesMap.get("didi").add(generatedService);
-                        //serviceRepository.save(generatedService);
+                        servicesMap.get("didi").add(active);
                         break;
                     case "beat":
-                        //TODO
-                        //servicesMap.get("beat").add(generatedService);
-                        //serviceRepository.save(generatedService);
+                        servicesMap.get("beat").add(active);
                         break;
                 }
             }

@@ -81,6 +81,92 @@ public class HttpConnectionService {
         return null;
     }
 
+    private static String getServiceDidi(Servicio serv) throws IOException {
+    	String url = "https://didi-backend-starsoft.herokuapp.com/generate";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setDoOutput(true);
+        con.setDoInput(true);
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.connect(); 
+        String jsonInputString = new Gson().toJson(serv);
+        OutputStream os = con.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+        osw.write(jsonInputString.toString());
+        osw.flush();
+        osw.close();
+
+        
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        
+        if (responseCode == HttpURLConnection.HTTP_ACCEPTED) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return response.toString();
+        } else {
+            System.out.println("GET request not worked");
+        }
+        System.out.println("GET DONE");
+        return null;
+    }
+
+    private static String getServiceBeat(Servicio serv) throws IOException {
+    	String url = "https://beat-backend-starsoft.herokuapp.com/generate";
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setDoOutput(true);
+        con.setDoInput(true);
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+        con.connect(); 
+        String jsonInputString = new Gson().toJson(serv);
+        OutputStream os = con.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+        osw.write(jsonInputString.toString());
+        osw.flush();
+        osw.close();
+
+        
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        
+        if (responseCode == HttpURLConnection.HTTP_ACCEPTED) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return response.toString();
+        } else {
+            System.out.println("GET request not worked");
+        }
+        System.out.println("GET DONE");
+        return null;
+    }
+
     
     public static String getUberAppDriver(String name) throws IOException {
     	String url = "https://uber-backend-starsoft.herokuapp.com/drivers/" + name;
@@ -145,9 +231,32 @@ public class HttpConnectionService {
     
 
     public static Servicio getGenerateUber(Servicio serv) throws IOException{
-        List<App> apps = serv.getCustomer().getApps();
         Customer cust =serv.getCustomer();
 		String data = getServiceUber(serv);
+		Servicio service = new Gson().fromJson(data,Servicio.class);
+		for (App app: cust.getApps()){
+		    app.setCustomer(cust);
+        }
+        service.setCustomer(cust);
+		return service;
+
+    }
+    
+    public static Servicio getGenerateDidi(Servicio serv) throws IOException{
+        Customer cust =serv.getCustomer();
+		String data = getServiceDidi(serv);
+		Servicio service = new Gson().fromJson(data,Servicio.class);
+		for (App app: cust.getApps()){
+		    app.setCustomer(cust);
+        }
+        service.setCustomer(cust);
+		return service;
+
+    }
+    
+    public static Servicio getGenerateBeat(Servicio serv) throws IOException{
+        Customer cust =serv.getCustomer();
+		String data = getServiceBeat(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
 		for (App app: cust.getApps()){
 		    app.setCustomer(cust);
