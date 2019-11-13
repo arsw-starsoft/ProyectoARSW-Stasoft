@@ -43,7 +43,6 @@ var app = (function () {
     }
 
     var stompClient = null;
-    var serviceObjectDriver = null;
 
     //Se conecta a el usuario a stomp
     var connectAndSubscribeUser = function () {
@@ -71,7 +70,6 @@ var app = (function () {
                 console.log("Subscribing to " + app.toLowerCase());
                 stompClient.subscribe("/topic/services." + app.toLowerCase(), function (eventBody) {
                     var object = JSON.parse(eventBody.body);
-                    serviceObjectDriver = object;
                 });
             });
         });

@@ -53,7 +53,7 @@ public class STOMPMessagesHandlerServices {
                     //Limpiar "cache"
                     servicioServices.cleanServices();
                 }
-            }, 10, 10000);
+            }, 10, 600000);
         }
     }
 }
