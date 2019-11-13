@@ -231,37 +231,22 @@ public class HttpConnectionService {
     
 
     public static Servicio getGenerateUber(Servicio serv) throws IOException{
-        Customer cust =serv.getCustomer();
 		String data = getServiceUber(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
-		for (App app: cust.getApps()){
-		    app.setCustomer(cust);
-        }
-        service.setCustomer(cust);
 		return service;
 
     }
     
     public static Servicio getGenerateDidi(Servicio serv) throws IOException{
-        Customer cust =serv.getCustomer();
 		String data = getServiceDidi(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
-		for (App app: cust.getApps()){
-		    app.setCustomer(cust);
-        }
-        service.setCustomer(cust);
 		return service;
 
     }
     
     public static Servicio getGenerateBeat(Servicio serv) throws IOException{
-        Customer cust =serv.getCustomer();
 		String data = getServiceBeat(serv);
 		Servicio service = new Gson().fromJson(data,Servicio.class);
-		for (App app: cust.getApps()){
-		    app.setCustomer(cust);
-        }
-        service.setCustomer(cust);
 		return service;
 
 	}

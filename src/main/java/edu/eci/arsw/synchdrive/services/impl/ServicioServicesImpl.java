@@ -62,33 +62,37 @@ public class ServicioServicesImpl implements ServicioServices {
 
     @Override
     public Map<String,Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException {
-
         try {
+            Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
             for (App app : servicio.getCustomer().getApps()) {
-                Servicio generatedServiceuber = new Servicio(); //Temporal
-                Servicio generatedServicedidi = new Servicio();
-                Servicio generatedServicebeat = new Servicio();
-                Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
+                Servicio generatedService = new Servicio(); //Temporal
+
                 switch (app.getName().toLowerCase()) {
                     case "didi":
-                        generatedServicedidi = HttpConnectionService.getGenerateDidi(servicio);
-                        generatedServicedidi.setCustomer(customer);
-                        servicesMap.get("didi").add(generatedServicedidi);
-                        serviceRepository.save(generatedServicedidi);
+                        Servicio temp = HttpConnectionService.getGenerateDidi(servicio);
+                        generatedService.setDuration(temp.getDuration());
+                        generatedService.setPrice(temp.getPrice());
+                        generatedService.setDistance(temp.getDistance());
                         break;
                     case "uber":
-                        generatedServiceuber = HttpConnectionService.getGenerateUber(servicio);
-                        generatedServiceuber.setCustomer(customer);
-                        servicesMap.get("uber").add(generatedServiceuber);
-                        serviceRepository.save(generatedServiceuber);
+                        Servicio temp2 = HttpConnectionService.getGenerateUber(servicio);
+                        generatedService.setDuration(temp2.getDuration());
+                        generatedService.setPrice(temp2.getPrice());
+                        generatedService.setDistance(temp2.getDistance());
                         break;
                     case "beat":
-                        generatedServicebeat = HttpConnectionService.getGenerateBeat(servicio);
-                        generatedServicebeat.setCustomer(customer);
-                        servicesMap.get("beat").add(generatedServicebeat);
-                        serviceRepository.save(generatedServicebeat);
+                        Servicio temp3 = HttpConnectionService.getGenerateBeat(servicio);
+                        generatedService.setDuration(temp3.getDuration());
+                        generatedService.setPrice(temp3.getPrice());
+                        generatedService.setDistance(temp3.getDistance());
                         break;
                 }
+                generatedService.setCustomer(customer);
+                App apptemp = new App();
+                apptemp.setCustomer(customer);
+                apptemp.setName(app.getName());
+                servicesMap.get(apptemp.getName().toLowerCase()).add(generatedService);
+                serviceRepository.save(generatedService);
             }
         }catch (IOException e){
             e.printStackTrace();
