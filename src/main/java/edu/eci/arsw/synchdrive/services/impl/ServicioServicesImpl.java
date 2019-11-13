@@ -12,8 +12,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.eci.arsw.synchdrive.connection.HttpConnectionService;
 import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.model.Driver;
 
+import edu.eci.arsw.synchdrive.persistence.UserRepository;
+import edu.eci.arsw.synchdrive.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,9 @@ public class ServicioServicesImpl implements ServicioServices {
 
     @Autowired
     private DriverRepository driverRepository;
+
+    @Autowired
+    private UserServices userServices;
 
     public ServicioServicesImpl(){
         servicesMap = new ConcurrentHashMap();
@@ -55,13 +61,16 @@ public class ServicioServicesImpl implements ServicioServices {
     }
 
     @Override
-    public Map<String,Queue<Servicio>> generateServices(Servicio servicio) {
+    public Map<String,Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException {
+
         try {
             for (App app : servicio.getCustomer().getApps()) {
                 Servicio generatedService = new Servicio(); //Temporal
                 switch (app.getName().toLowerCase()) {
                     case "uber":
                         generatedService = HttpConnectionService.getGenerateUber(servicio);
+                        Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
+                        generatedService.setCustomer(customer);
                         servicesMap.get("uber").add(generatedService);
                         serviceRepository.save(generatedService);
                         break;

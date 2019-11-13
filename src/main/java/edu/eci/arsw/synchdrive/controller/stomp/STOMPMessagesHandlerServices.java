@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.eci.arsw.synchdrive.persistence.ServicioRepository;
+import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 import edu.eci.arsw.synchdrive.persistence.UserRepository;
 import edu.eci.arsw.synchdrive.services.ServicioServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,12 @@ public class STOMPMessagesHandlerServices {
     public void handleServiceEvent(Servicio servicio) {
         System.out.println("Nueva solicitud de servicio " + servicio + " " + servicio.getCustomer().getApps());
         // Generar servicios
-        Map<String,Queue<Servicio>> servicios = servicioServices.generateServices(servicio);
+        Map<String,Queue<Servicio>> servicios = null;
+        try {
+           servicios = servicioServices.generateServices(servicio);
+        } catch (SynchdrivePersistenceException e) {
+            e.printStackTrace();
+        }
 
         //Si no esta iniciado el task
         if (!servicioServices.isStarted()) {

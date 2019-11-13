@@ -16,7 +16,7 @@ public interface ServicioServices {
 
     void saveService(Servicio service);
 
-    Map<String, Queue<Servicio>> generateServices(Servicio servicio);
+    Map<String, Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException;
 
     Map<String, Queue<Servicio>> loadActiveServices();
 
