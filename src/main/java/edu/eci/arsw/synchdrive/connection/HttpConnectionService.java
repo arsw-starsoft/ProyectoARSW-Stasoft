@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+import com.google.gson.GsonBuilder;
 import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Customer;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,8 @@ import edu.eci.arsw.synchdrive.model.Servicio;
 public class HttpConnectionService {
 
     private static final String USER_AGENT = "Mozilla/5.0";
+
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
      
     public static String getUberApp(String name) throws IOException {
     	String url = "https://uber-backend-starsoft.herokuapp.com/users/" + name;
@@ -48,7 +51,7 @@ public class HttpConnectionService {
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.connect(); 
-        String jsonInputString = new Gson().toJson(serv);
+        String jsonInputString = gson.toJson(serv);
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         osw.write(jsonInputString.toString());
@@ -91,7 +94,7 @@ public class HttpConnectionService {
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.connect(); 
-        String jsonInputString = new Gson().toJson(serv);
+        String jsonInputString = gson.toJson(serv);
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         osw.write(jsonInputString.toString());
@@ -134,7 +137,7 @@ public class HttpConnectionService {
         con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.connect(); 
-        String jsonInputString = new Gson().toJson(serv);
+        String jsonInputString = gson.toJson(serv);
         OutputStream os = con.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
         osw.write(jsonInputString.toString());
@@ -222,7 +225,7 @@ public class HttpConnectionService {
     public static Servicio[] getCloseServices(String appName,Coordinate coordinate) throws IOException{
 
 		String data = getAPPS(appName, coordinate);
-		Servicio[] service = new Gson().fromJson(data,Servicio[].class);
+		Servicio[] service = gson.fromJson(data,Servicio[].class);
 			
 	
 		return service;
@@ -232,21 +235,21 @@ public class HttpConnectionService {
 
     public static Servicio getGenerateUber(Servicio serv) throws IOException{
 		String data = getServiceUber(serv);
-		Servicio service = new Gson().fromJson(data,Servicio.class);
+		Servicio service = gson.fromJson(data,Servicio.class);
 		return service;
 
     }
     
     public static Servicio getGenerateDidi(Servicio serv) throws IOException{
 		String data = getServiceDidi(serv);
-		Servicio service = new Gson().fromJson(data,Servicio.class);
+		Servicio service = gson.fromJson(data,Servicio.class);
 		return service;
 
     }
     
     public static Servicio getGenerateBeat(Servicio serv) throws IOException{
 		String data = getServiceBeat(serv);
-		Servicio service = new Gson().fromJson(data,Servicio.class);
+		Servicio service = gson.fromJson(data,Servicio.class);
 		return service;
 
 	}

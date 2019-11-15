@@ -1,5 +1,7 @@
 package edu.eci.arsw.synchdrive.model;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,27 +13,35 @@ public class Customer implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private Integer idCustomer;
 
     @Column
+    @Expose
     private String email;
 
     @Column
+    @Expose
     private String firstName;
 
     @Column
+    @Expose
     private String lastName;
 
     @Column
+    @Expose
     private String userName;
 
     @Column
+    @Expose
     private String cellPhone;
 
     @Column
+    @Expose
     private String password;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    @Expose
     private List<App> apps;
 
     public String getEmail() {

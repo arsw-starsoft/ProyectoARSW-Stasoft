@@ -12,19 +12,19 @@ public class App implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private Integer idApp;
 
     @Column
+    @Expose
     private String name;
 
     @JsonIgnore
     @ManyToOne
-    @Expose
     private Driver driver;
 
     @JsonIgnore
     @ManyToOne
-    @Expose
     private Customer customer;
     
     public String getName() {

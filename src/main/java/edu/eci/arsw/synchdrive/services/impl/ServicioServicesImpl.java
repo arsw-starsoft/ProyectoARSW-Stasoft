@@ -63,38 +63,23 @@ public class ServicioServicesImpl implements ServicioServices {
     @Override
     public Map<String,Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException {
         try {
-            Customer customer= userServices.findUserByEmail(servicio.getCustomer().getEmail());
+            Customer customer = userServices.findUserByEmail(servicio.getCustomer().getEmail());
             for (App app : servicio.getCustomer().getApps()) {
                 Servicio generatedService = new Servicio(); //Temporal
-
                 switch (app.getName().toLowerCase()) {
                     case "didi":
-                        Servicio temp = HttpConnectionService.getGenerateDidi(servicio);
-                        generatedService.setDuration(temp.getDuration());
-                        generatedService.setPrice(temp.getPrice());
-                        generatedService.setDistance(temp.getDistance());
-                        generatedService.setActive(temp.getActive());
+                        generatedService = HttpConnectionService.getGenerateDidi(servicio);
                         break;
                     case "uber":
-                        Servicio temp2 = HttpConnectionService.getGenerateUber(servicio);
-                        generatedService.setDuration(temp2.getDuration());
-                        generatedService.setPrice(temp2.getPrice());
-                        generatedService.setDistance(temp2.getDistance());
-                        generatedService.setActive(temp2.getActive());
+                        generatedService = HttpConnectionService.getGenerateUber(servicio);
                         break;
                     case "beat":
-                        Servicio temp3 = HttpConnectionService.getGenerateBeat(servicio);
-                        generatedService.setDuration(temp3.getDuration());
-                        generatedService.setPrice(temp3.getPrice());
-                        generatedService.setDistance(temp3.getDistance());
-                        generatedService.setActive(temp3.getActive());
+                        generatedService = HttpConnectionService.getGenerateBeat(servicio);
                         break;
                 }
+                app.setCustomer(customer);
                 generatedService.setCustomer(customer);
-                App apptemp = new App();
-                apptemp.setCustomer(customer);
-                apptemp.setName(app.getName());
-                servicesMap.get(apptemp.getName().toLowerCase()).add(generatedService);
+                servicesMap.get(app.getName().toLowerCase()).add(generatedService);
                 serviceRepository.save(generatedService);
             }
         }catch (IOException e){
@@ -107,19 +92,25 @@ public class ServicioServicesImpl implements ServicioServices {
     public Map<String, Queue<Servicio>> loadActiveServices(){
         List<Servicio> activeServices = serviceRepository.getAllByActiveIsTrue();
         for (Servicio active: activeServices){
+            Servicio serviceToLoadUber = null;
+            Servicio serviceToLoadBeat = null;
+            Servicio serviceToLoadDidi = null;
             for (App app : active.getCustomer().getApps()) {
                 switch (app.getName().toLowerCase()) {
                     case "uber":
-                        servicesMap.get("uber").add(active);
+                        serviceToLoadUber = active;
                         break;
                     case "didi":
-                        servicesMap.get("didi").add(active);
+                        serviceToLoadDidi = active;
                         break;
                     case "beat":
-                        servicesMap.get("beat").add(active);
+                        serviceToLoadBeat = active;
                         break;
                 }
             }
+            if (serviceToLoadUber != null) servicesMap.get("uber").add(serviceToLoadUber);
+            if (serviceToLoadDidi != null) servicesMap.get("didi").add(serviceToLoadDidi);
+            if (serviceToLoadBeat != null) servicesMap.get("beat").add(serviceToLoadBeat);
         }
         return servicesMap;
     }

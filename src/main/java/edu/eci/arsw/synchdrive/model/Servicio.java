@@ -5,31 +5,39 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 
 @Entity
 public class Servicio implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Expose
     private Integer idService;
 
     @Column
+    @Expose
     private Double price;
 
     @Column
+    @Expose
     private Double duration;
 
     @Column
+    @Expose
     private Double distance;
 
     @Column
+    @Expose
     private Boolean active;
 
     @ManyToOne
+    @Expose
     private Driver driver;
     
     
     @ManyToOne
+    @Expose
     private Customer customer;
 
 

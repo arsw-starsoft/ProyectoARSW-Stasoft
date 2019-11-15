@@ -49,8 +49,12 @@ public class STOMPMessagesHandlerServices {
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    //CONSULTAR QUIENS SIGUEN ACTIVOS
-                    Map<String,Queue<Servicio>> servicios = servicioServices.loadActiveServices();
+                    //CONSULTAR UIENS SIGUEN ACTIVOS
+
+                    Map<String,Queue<Servicio>> servicios = null;
+
+                    servicios = servicioServices.loadActiveServices();
+
 
                     msgt.convertAndSend("/topic/services.uber", servicios.get("uber"));
                     msgt.convertAndSend("/topic/services.didi", servicios.get("didi"));
