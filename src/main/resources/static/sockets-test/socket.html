@@ -2,13 +2,13 @@
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/sockets-test/socket.js"></script>
 </head>
 <body>
     <h1>Sockets</h1>
     <button type="button" onclick="app.connectAndSubscribeDriver(['uber','didi','beat'])">Conectar Driver</button>
     <button type="button" onclick="app.connectAndSubscribeUser()">Conectar User</button>
-    <button type="button" onclick="app.acceptService()">Aceptar servicio</button>
     <button type="button" onclick="app.publishService()">Publicar Servicio</button>
 </body>
 

@@ -31,10 +31,13 @@ public class Servicio implements Serializable {
     @Expose
     private Boolean active;
 
+    @Column
+    @Expose
+    private App app;
+
     @ManyToOne
     @Expose
     private Driver driver;
-    
     
     @ManyToOne
     @Expose
@@ -103,5 +106,13 @@ public class Servicio implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public App getApp() {
+        return app;
+    }
+
+    public void setApp(App app) {
+        this.app = app;
     }
 }

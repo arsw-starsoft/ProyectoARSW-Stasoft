@@ -41,6 +41,11 @@ public class STOMPMessagesHandlerServices {
         } catch (SynchdrivePersistenceException e) {
             e.printStackTrace();
         }
+        msgt.convertAndSend("/topic/services.uber", servicios.get("uber"));
+        msgt.convertAndSend("/topic/services.didi", servicios.get("didi"));
+        msgt.convertAndSend("/topic/services.beat", servicios.get("beat"));
+        servicioServices.cleanServices();
+        /*
 
         //Si no esta iniciado el task
         if (!servicioServices.isStarted()) {
@@ -65,6 +70,8 @@ public class STOMPMessagesHandlerServices {
                 }
             }, 10, 10000);
         }
+
+         */
     }
 }
 

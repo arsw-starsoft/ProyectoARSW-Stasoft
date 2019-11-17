@@ -65,16 +65,25 @@ public class ServicioServicesImpl implements ServicioServices {
         try {
             Customer customer = userServices.findUserByEmail(servicio.getCustomer().getEmail());
             for (App app : servicio.getCustomer().getApps()) {
-                Servicio generatedService = new Servicio(); //Temporal
+                Servicio generatedService = null;
                 switch (app.getName().toLowerCase()) {
                     case "didi":
                         generatedService = HttpConnectionService.getGenerateDidi(servicio);
+                        App didiApp = new App();
+                        didiApp.setName("Didi");
+                        generatedService.setApp(didiApp);
                         break;
                     case "uber":
                         generatedService = HttpConnectionService.getGenerateUber(servicio);
+                        App uberApp = new App();
+                        uberApp.setName("Uber");
+                        generatedService.setApp(uberApp);
                         break;
                     case "beat":
                         generatedService = HttpConnectionService.getGenerateBeat(servicio);
+                        App beatApp = new App();
+                        beatApp.setName("Beat");
+                        generatedService.setApp(beatApp);
                         break;
                 }
                 app.setCustomer(customer);
@@ -92,25 +101,7 @@ public class ServicioServicesImpl implements ServicioServices {
     public Map<String, Queue<Servicio>> loadActiveServices(){
         List<Servicio> activeServices = serviceRepository.getAllByActiveIsTrue();
         for (Servicio active: activeServices){
-            Servicio serviceToLoadUber = null;
-            Servicio serviceToLoadBeat = null;
-            Servicio serviceToLoadDidi = null;
-            for (App app : active.getCustomer().getApps()) {
-                switch (app.getName().toLowerCase()) {
-                    case "uber":
-                        serviceToLoadUber = active;
-                        break;
-                    case "didi":
-                        serviceToLoadDidi = active;
-                        break;
-                    case "beat":
-                        serviceToLoadBeat = active;
-                        break;
-                }
-            }
-            if (serviceToLoadUber != null) servicesMap.get("uber").add(serviceToLoadUber);
-            if (serviceToLoadDidi != null) servicesMap.get("didi").add(serviceToLoadDidi);
-            if (serviceToLoadBeat != null) servicesMap.get("beat").add(serviceToLoadBeat);
+            servicesMap.get(active.getApp().getName().toLowerCase()).add(active);
         }
         return servicesMap;
     }
