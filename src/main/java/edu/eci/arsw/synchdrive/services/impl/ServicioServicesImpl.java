@@ -149,4 +149,33 @@ public class ServicioServicesImpl implements ServicioServices {
 
     }
 
+    @Override
+    public List<Servicio> findByApp(App app) {
+        
+        return serviceRepository.findByAppAndActiveIsTrue(app);
+    }
+
+    @Override
+    public List<Servicio> recordCustomer(Customer customer) {
+        return serviceRepository.findByCustomerAndActiveIsFalse(customer);
+    }
+
+    @Override
+    public List<Servicio> recordDriver(Driver driver) {
+        return serviceRepository.findByDriverAndActiveIsFalse(driver);
+    }
+
+    @Override
+    public void cancelService(Servicio servicio) throws SynchdrivePersistenceException {
+        Optional<Servicio> optionalService = serviceRepository.findById(servicio.getIdService());
+
+        if (optionalService.isPresent()){
+            Servicio service = optionalService.get();
+            serviceRepository.delete(service);
+        }else{
+            throw new SynchdrivePersistenceException(SynchdrivePersistenceException.SERVICE_NOT_FOUND);
+        }
+
+    }
+
 }

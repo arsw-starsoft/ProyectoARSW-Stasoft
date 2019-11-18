@@ -2,6 +2,9 @@ package edu.eci.arsw.synchdrive.services;
 
 import java.util.List;
 
+import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.model.Customer;
+import edu.eci.arsw.synchdrive.model.Driver;
 import edu.eci.arsw.synchdrive.model.Servicio;
 import edu.eci.arsw.synchdrive.persistence.SynchdrivePersistenceException;
 
@@ -27,6 +30,14 @@ public interface ServicioServices {
     void cleanServices();
 
     void acceptService(String driver,String app,Servicio servicio) throws SynchdrivePersistenceException;
+
+    List<Servicio> findByApp (App app);
+
+    List<Servicio> recordCustomer (Customer customer);
+
+    List<Servicio> recordDriver(Driver driver);
+
+    void cancelService(Servicio servicio) throws SynchdrivePersistenceException;
 
 
 }
