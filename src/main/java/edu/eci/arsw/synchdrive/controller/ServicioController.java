@@ -2,9 +2,12 @@ package edu.eci.arsw.synchdrive.controller;
 
 import java.util.List;
 
+import edu.eci.arsw.synchdrive.model.App;
+import edu.eci.arsw.synchdrive.persistence.ServicioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.validation.Valid;
 
 
@@ -27,6 +31,9 @@ public class ServicioController {
     @Autowired
     private ServicioServices servicioServices;
 
+    @Autowired
+    ServicioRepository servicioRepository;
+
     //Método de prueba para verificar autowired y repo
     @GetMapping(value = "/serviciotest")
     public ResponseEntity<?> testMethod() throws SynchdrivePersistenceException {
@@ -38,35 +45,41 @@ public class ServicioController {
         return new ResponseEntity<>(servicio, HttpStatus.CREATED);
     }
 
- 
+
     @GetMapping
-    public ResponseEntity<?> getAllServicios(){
-        
+    public ResponseEntity<?> getAllServicios() {
+
         List<Servicio> servicios = servicioServices.getAllServices();
-        return new ResponseEntity<>(servicios,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(servicios, HttpStatus.ACCEPTED);
     }
-    
 
 
-    
     @PostMapping
-    public ResponseEntity<?> addNewApp(@RequestBody Servicio servicio){
-        
+    public ResponseEntity<?> addNewApp(@RequestBody Servicio servicio) {
+
         servicioServices.saveService(servicio);
-        return new ResponseEntity<>(servicio,HttpStatus.CREATED);
-        
+        return new ResponseEntity<>(servicio, HttpStatus.CREATED);
+
     }
 
     @PutMapping(path = "/{driver}/{app}")
-    public ResponseEntity<?> acceptService(@PathVariable("driver") String driver,@PathVariable("app") String app,@Valid @RequestBody Servicio servicio){
+    public ResponseEntity<?> acceptService(@PathVariable("driver") String driver, @PathVariable("app") String app, @Valid @RequestBody Servicio servicio) {
         try {
-          
-            servicioServices.acceptService(driver,app,servicio);
+
+            servicioServices.acceptService(driver, app, servicio);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (SynchdrivePersistenceException ex) {
-            return new ResponseEntity<>(ex.getMessage(),HttpStatus.FORBIDDEN);            
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
 
+    }
+
+    @GetMapping(path = "/{app}")
+    public ResponseEntity<?> getServicesOfApp(@PathVariable("app") String app) {
+        App app2 = new App();
+        app = StringUtils.capitalize(app);
+        app2.setName(app);
+        return new ResponseEntity<>(servicioRepository.findByApp(app2), HttpStatus.ACCEPTED);
     }
 
 
