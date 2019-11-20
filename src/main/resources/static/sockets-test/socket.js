@@ -1,13 +1,15 @@
 var app = (function () {
 
     class Service {
-        constructor(price, duration, distance, customer, active,app) {
+        constructor(price, duration, distance, customer, active,app, idPeticion,destino) {
             this.price = price;
             this.duration = duration;
             this.distance = distance;
             this.customer = customer;
             this.active = active;
             this.app = app;
+            this.idPeticion = idPeticion;
+            this.destino = destino;
         }
 
     }
@@ -44,7 +46,7 @@ var app = (function () {
     }
 
     var stompClient = null;
-
+    var idCount = 0;
     var customer = new Customer("luis@mail.com","Test","TT","test","44564","123",[new App("Uber"),new App("Didi"),new App("Beat")]);
     var driver = new Driver("julian@mail.com","t","t","t","t","1",[new App("Uber"),new App("Didi"),new App("Beat")]);
 
@@ -73,12 +75,14 @@ var app = (function () {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
-            listApps.forEach(function (app) {
-                console.log("Subscribing to " + app.toLowerCase());
-                stompClient.subscribe("/topic/services." + app.toLowerCase(), function (eventBody) {
+            listApps.forEach(function (appp) {
+                console.log("Subscribing to " + appp.toLowerCase());
+                stompClient.subscribe("/topic/services." + appp.toLowerCase(), function (eventBody) {
                     var object = JSON.parse(eventBody.body);
-                    console.log(object);
-                    webSocketActive.push(object[0]);
+                    console.log("LLEGA! " + object);
+                    object.forEach(function (s) {
+                        app.webSocketActive.push(s);
+                    });
                     console.log(webSocketActive);
                 });
 
@@ -94,25 +98,32 @@ var app = (function () {
             stompClient.subscribe("/topic/accepted",function (eventBody) {
                 var object = JSON.parse(eventBody.body);
                 console.log("Accepted... " + object);
-                var indexService = webSocketActive.indexOf(object[0]);
-                webSocketActive.splice(indexService,1);
-                console.log("Removed from arr " + webSocketActive);
+                app.webSocketActive = [];
+                console.log("Web "  + app.webSocketActive);
+                object.forEach(function (obj) {
+                    app.webSocketActive.push(obj);
+                })
             });
         });
     };
 
     //El usuario publica servicio en /app/services
     var publishService = function () {
-        console.log("Publishing....");
-
-        var service = new Service(null,null,null,customer,true,null);
-        console.log(service);
-        console.log(stompClient);
-        stompClient.send("/app/services", {}, JSON.stringify(service));
+        for (var i = 0; i< 2; i++) {
+            idCount++;
+            var service = new Service(null,null,null,customer,true,null,idCount,"SPM"+i);
+            console.log("Publishing....");
+            console.log(service);
+            console.log(stompClient);
+            stompClient.send("/app/services", {}, JSON.stringify(service));
+        }
     };
 
     var publishAcceptService = function (service) {
-       stompClient.send("/topic/accepted",{},JSON.stringify(service));
+        var list = webSocketActive.filter(function (serv) {
+            return serv.idPeticion !== service.idPeticion;
+        });
+        stompClient.send("/topic/accepted",{},JSON.stringify(list));
     };
 
     var acceptService = function (service,callback) {

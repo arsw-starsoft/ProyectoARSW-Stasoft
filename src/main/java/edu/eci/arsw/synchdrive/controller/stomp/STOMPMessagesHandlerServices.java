@@ -35,16 +35,19 @@ public class STOMPMessagesHandlerServices {
     public void handleServiceEvent(Servicio servicio) {
         System.out.println("Nueva solicitud de servicio " + servicio + " " + servicio.getCustomer().getApps());
         // Generar servicios
-        Map<String,Queue<Servicio>> servicios = null;
+        Map<String,List<Servicio>> servicios = null;
         try {
            servicios = servicioServices.generateServices(servicio);
         } catch (SynchdrivePersistenceException e) {
             e.printStackTrace();
         }
+        System.out.println("ENVIANDO!!!");
+        System.out.println("UBER: " +servicios.get("uber") );
+        System.out.println("DIDI: " +servicios.get("didi") );
+        System.out.println("BEAT: " +servicios.get("beat") );
         msgt.convertAndSend("/topic/services.uber", servicios.get("uber"));
         msgt.convertAndSend("/topic/services.didi", servicios.get("didi"));
         msgt.convertAndSend("/topic/services.beat", servicios.get("beat"));
-        servicioServices.cleanServices();
         /*
 
         //Si no esta iniciado el task

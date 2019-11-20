@@ -1,11 +1,7 @@
 package edu.eci.arsw.synchdrive.services.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,23 +25,11 @@ import edu.eci.arsw.synchdrive.services.ServicioServices;
 @Service
 public class ServicioServicesImpl implements ServicioServices {
 
-    private Map<String,Queue<Servicio>> servicesMap;
-
-    private AtomicBoolean started;
-
     @Autowired
     private DriverRepository driverRepository;
 
     @Autowired
     private UserServices userServices;
-
-    public ServicioServicesImpl(){
-        servicesMap = new ConcurrentHashMap();
-        servicesMap.put("uber",new ConcurrentLinkedQueue<>());
-        servicesMap.put("didi",new ConcurrentLinkedQueue<>());
-        servicesMap.put("beat",new ConcurrentLinkedQueue<>());
-        started = new AtomicBoolean(false);
-    }
 
     @Autowired
     private ServicioRepository serviceRepository;
@@ -61,7 +45,9 @@ public class ServicioServicesImpl implements ServicioServices {
     }
 
     @Override
-    public Map<String,Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException {
+    public Map<String,List<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException {
+        Map<String, List<Servicio>> servicesMap = new HashMap<>();
+        servicesMap = initMap(servicesMap);
         try {
             Customer customer = userServices.findUserByEmail(servicio.getCustomer().getEmail());
             for (App app : servicio.getCustomer().getApps()) {
@@ -97,32 +83,24 @@ public class ServicioServicesImpl implements ServicioServices {
         return servicesMap;
     }
 
+    private Map<String, List<Servicio>> initMap(Map<String, List<Servicio>> servicesMap) {
+        servicesMap.put("uber", new ArrayList<>());
+        servicesMap.put("didi", new ArrayList<>());
+        servicesMap.put("beat", new ArrayList<>());
+        return servicesMap;
+    }
+
     @Override
-    public Map<String, Queue<Servicio>> loadActiveServices(){
+    public Map<String, List<Servicio>> loadActiveServices(){
         List<Servicio> activeServices = serviceRepository.getAllByActiveIsTrue();
+        Map<String,List<Servicio>> servicesMap = new HashMap<>();
+        servicesMap = initMap(servicesMap);
         for (Servicio active: activeServices){
             servicesMap.get(active.getApp().getName().toLowerCase()).add(active);
         }
         return servicesMap;
     }
 
-    @Override
-    public boolean isStarted() {
-        return started.get();
-    }
-
-    @Override
-    public void setStarted(boolean started) {
-        this.started.set(started);
-    }
-
-    @Override
-    public void cleanServices() {
-        servicesMap.clear();
-        servicesMap.put("uber",new ConcurrentLinkedQueue<>());
-        servicesMap.put("didi",new ConcurrentLinkedQueue<>());
-        servicesMap.put("beat",new ConcurrentLinkedQueue<>());
-    }
 
     @Override
     public void acceptService(String driver,String app,Servicio servicio) throws SynchdrivePersistenceException{
@@ -185,8 +163,7 @@ public class ServicioServicesImpl implements ServicioServices {
         List<Servicio> listCustomer = serviciosCustomer(customer);
         for (Servicio ser : listCustomer){
             if (servicioActual.getIdPeticion() == ser.getIdPeticion()){
-                ser.setActive(false);
-                serviceRepository.save(ser);
+                serviceRepository.delete(ser);
             }
         }
         

@@ -19,15 +19,9 @@ public interface ServicioServices {
 
     void saveService(Servicio service);
 
-    Map<String, Queue<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException;
+    Map<String, List<Servicio>> generateServices(Servicio servicio) throws SynchdrivePersistenceException;
 
-    Map<String, Queue<Servicio>> loadActiveServices();
-
-    boolean isStarted();
-
-    void setStarted(boolean started);
-
-    void cleanServices();
+    Map<String, List<Servicio>> loadActiveServices();
 
     void acceptService(String driver,String app,Servicio servicio) throws SynchdrivePersistenceException;
 
@@ -38,7 +32,6 @@ public interface ServicioServices {
     List<Servicio> recordDriver(Driver driver);
 
     void cancelService(Servicio servicio) throws SynchdrivePersistenceException;
-
 
     List<Servicio> serviciosCustomer (Customer customer);
 
