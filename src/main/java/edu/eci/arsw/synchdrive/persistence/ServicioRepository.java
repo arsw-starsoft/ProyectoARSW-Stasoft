@@ -29,4 +29,6 @@ public interface ServicioRepository extends JpaRepository<Servicio, Integer> {
     List<Servicio> findByCustomerAndActiveIsFalse(Customer customer);
 
     List<Servicio> findByDriverAndActiveIsFalse(Driver driver);
+
+    List<Servicio> findByCustomerAndActiveIsTrue(Customer customer);
 }

@@ -40,4 +40,7 @@ public interface ServicioServices {
     void cancelService(Servicio servicio) throws SynchdrivePersistenceException;
 
 
+    List<Servicio> serviciosCustomer (Customer customer);
+
+
 }

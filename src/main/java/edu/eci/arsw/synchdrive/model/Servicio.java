@@ -29,6 +29,15 @@ public class Servicio implements Serializable {
 
     @Column
     @Expose
+    private String destino;
+
+
+    @Column
+    @Expose
+    private Integer idPeticion;
+
+    @Column
+    @Expose
     private Boolean active;
 
     @Column
@@ -115,4 +124,21 @@ public class Servicio implements Serializable {
     public void setApp(App app) {
         this.app = app;
     }
+
+    public String getDestino(){
+        return this.destino;
+    }
+
+    public void setDestino(String destino){
+        this.destino = destino;
+    }
+
+    public Integer getIdPeticion(){
+        return this.idPeticion;
+    }
+
+    public void setIdPeticion(Integer idPeticion){
+        this.idPeticion = idPeticion;
+    }
+
 }

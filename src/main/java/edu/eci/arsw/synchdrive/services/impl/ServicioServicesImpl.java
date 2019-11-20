@@ -139,6 +139,8 @@ public class ServicioServicesImpl implements ServicioServices {
                 }
                 serv.setDriver(optionalDriver.get());
                 serviceRepository.save(serv);
+                cancelOtherServices(serv.getCustomer(), serv);
+
             }else{
                 throw new SynchdrivePersistenceException(SynchdrivePersistenceException.SERVICE_NOT_ACTIVE);
             }
@@ -176,6 +178,23 @@ public class ServicioServicesImpl implements ServicioServices {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.SERVICE_NOT_FOUND);
         }
 
+    }
+
+    private void cancelOtherServices(Customer customer,Servicio servicioActual){
+
+        List<Servicio> listCustomer = serviciosCustomer(customer);
+        for (Servicio ser : listCustomer){
+            if (servicioActual.getIdPeticion() == ser.getIdPeticion()){
+                ser.setActive(false);
+                serviceRepository.save(ser);
+            }
+        }
+        
+    }
+
+    @Override
+    public List<Servicio> serviciosCustomer(Customer customer) {
+        return serviceRepository.findByCustomerAndActiveIsTrue(customer);
     }
 
 }
