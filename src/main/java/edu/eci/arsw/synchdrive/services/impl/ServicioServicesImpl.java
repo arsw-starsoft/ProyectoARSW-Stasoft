@@ -162,7 +162,7 @@ public class ServicioServicesImpl implements ServicioServices {
 
         List<Servicio> listCustomer = serviciosCustomer(customer);
         for (Servicio ser : listCustomer){
-            if (servicioActual.getIdPeticion() == ser.getIdPeticion()){
+            if (servicioActual.getIdPeticion().equals(ser.getIdPeticion())){
                 serviceRepository.delete(ser);
             }
         }
