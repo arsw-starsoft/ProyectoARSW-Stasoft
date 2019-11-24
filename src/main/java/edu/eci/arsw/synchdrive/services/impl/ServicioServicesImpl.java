@@ -174,4 +174,35 @@ public class ServicioServicesImpl implements ServicioServices {
         return serviceRepository.findByCustomerAndActiveIsTrue(customer);
     }
 
+    @Override
+    public App cheaperService(String newCustomer,String destino) throws SynchdrivePersistenceException ,IOException {
+        Customer customer = userServices.findUserByEmail(newCustomer);
+        Map<String,Double> priceAPP = new HashMap<>();
+        for (App app : customer.getApps()) {
+
+            switch (app.getName().toLowerCase()) {
+                case "didi":
+                    priceAPP.put("didi", HttpConnectionService.getLowDidiCost(destino));
+                    break;
+                case "uber":
+                    priceAPP.put("uber", HttpConnectionService.getLowUberCost(destino));
+                    break;
+                case "beat":
+                    priceAPP.put("beat", HttpConnectionService.getLowBeatCost(destino));
+                    break;
+            }
+        }
+        String newApp = null;
+        Double minino = 99999999.0;
+        for (Map.Entry<String, Double> entry : priceAPP.entrySet()) {
+            if (entry.getValue()<minino ){
+                minino = entry.getValue();
+                newApp=entry.getKey();
+            }
+        }
+        App app = new App();
+        app.setName(newApp);
+        return app;
+    }
+
 }

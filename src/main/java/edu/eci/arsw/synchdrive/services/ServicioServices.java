@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.eci.arsw.synchdrive.model.App;
@@ -34,6 +35,8 @@ public interface ServicioServices {
     void cancelService(Servicio servicio) throws SynchdrivePersistenceException;
 
     List<Servicio> serviciosCustomer (Customer customer);
+
+    App cheaperService(String customer,String destino) throws SynchdrivePersistenceException, IOException;
 
 
 }

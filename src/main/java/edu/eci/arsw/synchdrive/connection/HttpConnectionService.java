@@ -253,7 +253,127 @@ public class HttpConnectionService {
 		return service;
 
 	}
-        
+
+
+    private static String getLowDidiApp(String destino) throws IOException {
+        String url = "https://didi-backend-starsoft.herokuapp.com/servicios/generate/" + destino;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == HttpURLConnection.HTTP_ACCEPTED) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return response.toString();
+        } else {
+            System.out.println("GET request not worked");
+        }
+        System.out.println("GET DONE");
+
+        return null;
+    }
+
+    private static String getLowUberApp(String destino) throws IOException{
+        String url = "https://uber-backend-starsoft.herokuapp.com/servicios/generate/" + destino;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == HttpURLConnection.HTTP_ACCEPTED) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return response.toString();
+        } else {
+            System.out.println("GET request not worked");
+        }
+        System.out.println("GET DONE");
+        return null;
+
+    }
+
+    private static String getLowBeatApp(String destino) throws IOException {
+        String url = "https://beat-backend-starsoft.herokuapp.com/servicios/generate/" + destino;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+
+        //The following invocation perform the connection implicitly before getting the code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == HttpURLConnection.HTTP_ACCEPTED) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return response.toString();
+        } else {
+            System.out.println("GET request not worked");
+        }
+        System.out.println("GET DONE");
+        return null;
+    }
+
+    public static Double getLowDidiCost(String destino) throws IOException{
+        String data = getLowDidiApp(destino);
+        Double service = gson.fromJson(data,Double.class);
+        return service;
+
+    }
+
+    public static Double getLowUberCost(String destino) throws IOException{
+        String data = getLowUberApp(destino);
+        Double service = gson.fromJson(data,Double.class);
+        return service;
+
+    }
+
+    public static Double getLowBeatCost(String destino) throws IOException{
+        String data = getLowBeatApp(destino);
+        Double service = gson.fromJson(data,Double.class);
+        return service;
+
+    }
+
 
 
 }

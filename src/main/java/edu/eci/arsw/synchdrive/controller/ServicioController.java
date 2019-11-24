@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.eci.arsw.synchdrive.model.App;
@@ -84,6 +85,20 @@ public class ServicioController {
         }
 
     }
+
+    @GetMapping(path = "/{user}/cheaperService/{destino}")
+    public ResponseEntity<?> cheaperService(@PathVariable("user") String user,@PathVariable("destino") String destino) {
+        try {
+            return new ResponseEntity<>(servicioServices.cheaperService(user,destino),HttpStatus.ACCEPTED);
+        } catch (SynchdrivePersistenceException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (IOException e) {
+            return new ResponseEntity<>("NO aplicaciones externas ", HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+        }
+
+    }
+
 
 
     @PutMapping(path = "/cancelService")
