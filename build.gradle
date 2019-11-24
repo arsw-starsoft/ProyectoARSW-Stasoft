@@ -15,7 +15,7 @@ repositories {
 }
 
 application {
-	mainClassName = 'SynchdriveApplication'
+	mainClassName = 'edu.eci.arsw.synchdrive.SynchdriveApplication'
 }
 
 test.finalizedBy jacocoTestReport
