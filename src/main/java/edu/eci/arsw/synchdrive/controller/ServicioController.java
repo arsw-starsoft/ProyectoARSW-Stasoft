@@ -37,7 +37,6 @@ public class ServicioController {
     @Autowired
     private ServicioServices servicioServices;
 
-
     @Autowired
     private UserServices userServices;
 
@@ -81,6 +80,8 @@ public class ServicioController {
             servicioServices.acceptService(driver, app, servicio);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (SynchdrivePersistenceException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getStackTrace());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
 
