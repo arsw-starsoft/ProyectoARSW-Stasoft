@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.1.8.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id 'jacoco'
+	id 'application'
 }
 
 group = 'edu.eci.arsw'
@@ -12,6 +14,11 @@ repositories {
 	mavenCentral()
 }
 
+application {
+	mainClassName = 'SynchdriveApplication'
+}
+
+test.finalizedBy jacocoTestReport
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -24,7 +31,6 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.1.8.RELEASE'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	runtimeOnly 'com.h2database:h2'
+	compile 'com.google.guava:guava:22.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
-
