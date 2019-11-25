@@ -175,12 +175,13 @@ public class ServicioServicesImpl implements ServicioServices {
     }
 
     @Override
-    public App cheaperService(String newCustomer,String destino) throws SynchdrivePersistenceException ,IOException {
-        Customer customer = userServices.findUserByEmail(newCustomer);
+    public App cheaperService(String napps,String destino) throws SynchdrivePersistenceException ,IOException {
+        String[] apps = napps.split("-");
+        
         Map<String,Double> priceAPP = new HashMap<>();
-        for (App app : customer.getApps()) {
+        for (int i=0; i<apps.length;i++) {
 
-            switch (app.getName().toLowerCase()) {
+            switch (apps[i].toLowerCase()) {
                 case "didi":
                     priceAPP.put("didi", HttpConnectionService.getLowDidiCost(destino));
                     break;

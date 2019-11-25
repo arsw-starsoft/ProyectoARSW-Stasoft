@@ -87,10 +87,10 @@ public class ServicioController {
 
     }
 
-    @GetMapping(path = "/{user}/cheaperService/{destino}")
-    public ResponseEntity<?> cheaperService(@PathVariable("user") String user,@PathVariable("destino") String destino) {
+    @GetMapping(path = "/{apps}/cheaperService/{destino}")
+    public ResponseEntity<?> cheaperService(@PathVariable("apps") String apps,@PathVariable("destino") String destino) {
         try {
-            return new ResponseEntity<>(servicioServices.cheaperService(user,destino),HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(servicioServices.cheaperService(apps,destino),HttpStatus.ACCEPTED);
         } catch (SynchdrivePersistenceException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
