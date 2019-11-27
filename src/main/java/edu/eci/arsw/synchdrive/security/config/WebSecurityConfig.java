@@ -96,7 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(HttpMethod.POST,"/drivers").permitAll().and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/stompendpoint/**").permitAll().and()
                 .authorizeRequests().antMatchers("/topic/**").permitAll().and()
-                .authorizeRequests().antMatchers("/app/**").permitAll().
+                .authorizeRequests().antMatchers("/app/**").permitAll().and()
+                .authorizeRequests().antMatchers("/servicios/generate").permitAll().
 
 // all other requests need to be authenticated
         anyRequest().authenticated().
