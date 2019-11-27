@@ -36,7 +36,7 @@ public interface ServicioServices {
 
     List<Servicio> serviciosCustomer (Customer customer);
 
-    App cheaperService(String customer,String destino) throws SynchdrivePersistenceException, IOException;
+    App cheaperService(String apps,String destino) throws SynchdrivePersistenceException, IOException;
 
 
 }
