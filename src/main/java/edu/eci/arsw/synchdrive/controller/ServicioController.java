@@ -2,6 +2,7 @@ package edu.eci.arsw.synchdrive.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Customer;
@@ -144,6 +145,19 @@ public class ServicioController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
         
+    }
+
+    @PostMapping(path = "/generate")
+    public ResponseEntity<?> generateServicesLoadBalanceTest(@RequestBody Servicio servicio){
+        Map<String,List<Servicio>> servicios = null;
+        try{
+            servicios = servicioServices.generateServices(servicio);
+            return new ResponseEntity<>(servicios, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }

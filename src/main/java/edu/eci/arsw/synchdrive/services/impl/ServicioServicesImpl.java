@@ -72,6 +72,7 @@ public class ServicioServicesImpl implements ServicioServices {
                         generatedService.setApp(beatApp);
                         break;
                 }
+                System.out.println("GUARDANDO!");
                 app.setCustomer(customer);
                 generatedService.setCustomer(customer);
                 servicesMap.get(app.getName().toLowerCase()).add(generatedService);
