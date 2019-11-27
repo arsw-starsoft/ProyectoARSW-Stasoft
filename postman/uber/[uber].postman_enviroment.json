@@ -4,7 +4,7 @@
         "values": [
                 {
                         "key": "VM1",
-                        "value": "uber-backend-starsoft.herokuapp.com/servicios/generate",
+                        "value": "synchdriveloadbalancer-1655617125.us-east-1.elb.amazonaws.com:8080/servicios/generate",
                         "enabled": true
                 }
         ],
