@@ -1,5 +1,6 @@
 package edu.eci.arsw.synchdrive.security.config;
 
+import edu.eci.arsw.synchdrive.cache.CustomerCache;
 import edu.eci.arsw.synchdrive.model.Customer;
 import edu.eci.arsw.synchdrive.model.Driver;
 import edu.eci.arsw.synchdrive.persistence.DriverRepository;
@@ -21,6 +22,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private CustomerCache customerCache;
+
+    @Autowired
     private DriverRepository driverRepository;
 
     @Override
@@ -31,7 +35,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             return new User(driver.getEmail(),driver.getPassword(), new ArrayList<>());
         }
 
-        Optional<Customer> optionalCustomer = userRepository.findByEmail(email);
+        Optional<Customer> optionalCustomer = customerCache.findByEmail(email);
         if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
             return new User(customer.getEmail(), customer.getPassword(), new ArrayList<>());

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.eci.arsw.synchdrive.cache.CustomerCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class UserServicesImpl implements UserServices {
     private UserRepository userRepository;
 
     @Autowired
+    private CustomerCache customerCache;
+
+    @Autowired
     private AppRepository appRepository;
 
     @Autowired
@@ -38,21 +42,21 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void saveUser(Customer customer) throws SynchdrivePersistenceException {
-        Optional<Customer> optionalCustomer = userRepository.findByEmail(customer.getEmail());
+        Optional<Customer> optionalCustomer = customerCache.findByEmail(customer.getEmail());
         if (optionalCustomer.isPresent()) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_ALREDY_EXISTS);
         } else {
             String rawPassword = customer.getPassword();
             String encodedPassword = bcryptPasswordEncoder.encode(rawPassword);
             customer.setPassword(encodedPassword);
-            userRepository.save(customer);
+            customerCache.save(customer);
         }
 
     }
 
     @Override
     public Customer findUserByEmail(String user) throws SynchdrivePersistenceException {
-        Optional<Customer> optinalUser = userRepository.findByEmail(user);
+        Optional<Customer> optinalUser = customerCache.findByEmail(user);
         boolean present = optinalUser.isPresent();
         System.out.println(present);
         if (!present)
@@ -62,7 +66,7 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public List<App> findAppsByEmail(String user) throws SynchdrivePersistenceException {
-        Optional<Customer> optinalUser = userRepository.findByEmail(user);
+        Optional<Customer> optinalUser = customerCache.findByEmail(user);
         boolean present = optinalUser.isPresent();
         System.out.println(present);
         if (!present)
@@ -72,7 +76,7 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void updateApps(String customer, App app) throws SynchdrivePersistenceException {
-        Optional<Customer> optinalUser = userRepository.findByEmail(customer);
+        Optional<Customer> optinalUser = customerCache.findByEmail(customer);
         boolean present = optinalUser.isPresent();
         if (!present) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
@@ -90,7 +94,7 @@ public class UserServicesImpl implements UserServices {
                 newApp.add(app);
                 cus.setApps(newApp);
             }
-            userRepository.save(cus);
+            customerCache.save(cus);
 
         }
 
@@ -98,7 +102,7 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void updateUser(String user, Customer customer) throws SynchdrivePersistenceException, IOException {
-        Optional<Customer> optinalUser = userRepository.findByEmail(user);
+        Optional<Customer> optinalUser = customerCache.findByEmail(user);
         boolean present = optinalUser.isPresent();
         if (!present) {
             throw new SynchdrivePersistenceException(SynchdrivePersistenceException.CUSTOMER_NOT_FOUND);
@@ -110,7 +114,7 @@ public class UserServicesImpl implements UserServices {
             cus.setLastName(customer.getLastName());
             cus.setName(customer.getUserName());
             cus.setPassword(customer.getPassword());
-            userRepository.save(cus);
+            customerCache.save(cus);
         }
 
     }
@@ -118,7 +122,7 @@ public class UserServicesImpl implements UserServices {
     @Override
     public List<Servicio> getCloseServices(String user,Coordinate coordinate) throws SynchdrivePersistenceException , IOException {
         List<Servicio> serviciosPosibles = new ArrayList<>();
-        for (App i : userRepository.findByEmail(user).get().getApps()){
+        for (App i : customerCache.findByEmail(user).get().getApps()){
 
             Servicio[] servicesApp = HttpConnectionService.getCloseServices(i.getName(),coordinate);
             for (int j = 0 ; j< 3;j++){
@@ -135,12 +139,14 @@ public class UserServicesImpl implements UserServices {
         if (!apps.isEmpty()) {
 
             List<App> currentApps = customer.getApps();
-            for (App j : currentApps) {
-                appRepository.delete(j);
+            if (currentApps != null) {
+                for (App app : currentApps) {
+                    customerCache.delete(app);
+                }
             }
-            for (App i : apps) {
+            for (App app : apps) {
                 Boolean flag = false;
-                if (i.getName().equals("Uber")) {
+                if (app.getName().equals("Uber")) {
                     String response = HttpConnectionService.getUberApp(customer.getEmail());
                     System.out.println(response);
                     
@@ -151,9 +157,9 @@ public class UserServicesImpl implements UserServices {
                     flag = true;
                 }
                 if (true) {
-                    i.setCustomer(customer);
-                    appRepository.save(i);
-                    newApps.add(i);
+                    app.setCustomer(customer);
+                    customerCache.save(app);
+                    newApps.add(app);
                 }
             }
             customer.setApps(newApps);

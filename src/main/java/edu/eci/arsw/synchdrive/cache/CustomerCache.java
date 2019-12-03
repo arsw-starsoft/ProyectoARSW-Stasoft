@@ -1,15 +1,18 @@
 package edu.eci.arsw.synchdrive.cache;
 
+import edu.eci.arsw.synchdrive.model.App;
 import edu.eci.arsw.synchdrive.model.Customer;
 
 import java.util.Optional;
 
 public interface CustomerCache {
 
-    Optional<Customer> getCustomer(String email);
+    Optional<Customer> findByEmail(String email);
 
-    void saveCustomer(Optional<Customer> customer);
+    void save(Customer customer);
 
-    Long getTimeInCache(String email);
+    void save(App customerApp);
+
+    void delete(App customerApp);
 
 }
