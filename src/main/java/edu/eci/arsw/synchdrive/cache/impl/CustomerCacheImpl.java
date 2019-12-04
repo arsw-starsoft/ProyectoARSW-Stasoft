@@ -53,7 +53,7 @@ public class CustomerCacheImpl implements CustomerCache {
                 }
 
             }
-        }, 120000, 120000); //1 min
+        }, 900000, 900000); //15 mins
     }
 
     @Override

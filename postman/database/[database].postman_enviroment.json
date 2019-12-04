@@ -4,7 +4,7 @@
         "values": [
                 {
                         "key": "VM1",
-                        "value": "localhost:8080/servicios/generate",
+                        "value": "13.92.247.60:8080/servicios/generate",
                         "enabled": true
                 }
         ],
